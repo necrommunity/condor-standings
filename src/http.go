@@ -34,7 +34,9 @@ var (
 
 type TemplateData struct {
 	Title        string
-	UserAccounts []models.UserAccounts
+	UsersTotal   int
+	UserAccounts []models.UserAccount
+	FoundTables  []models.FoundTable
 }
 
 //  -----------------------

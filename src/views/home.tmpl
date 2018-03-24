@@ -1,3 +1,16 @@
 {{ define "content" }}
 Welcome to the home page of condor standings
+<p>
+Total user accounts found: {{ .UsersTotal }}
+</p>
+
+Select the event:
+<select onChange='changeEvent(this.value);'>
+  <option value="" selected="selected" disabled>Event</option>
+  {{ range .FoundTables }}
+  <option value="{{ .TableName.Value }}"> {{ .TableName.Value }} </option>
+  {{ end }}
+
+</select>
+
 {{ end }}

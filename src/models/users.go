@@ -7,22 +7,32 @@ import (
 // Users struct captures all users found
 type Users struct{}
 
-// UserAccounts gets each row for all profiles
-type UserAccounts struct {
-	Username sql.NullString
+// UserAccount gets each row for all profiles
+type UserAccount struct {
+	DiscordID       sql.NullInt64
+	DiscordUsername sql.NullString
+}
+
+// FoundUserNDWC struct stores the info needed for NDWC events
+type FoundUserNDWC struct {
+	DiscordID       sql.NullInt64
+	DiscordUsername sql.NullInt64
+	NDWCGroup       sql.NullString
 }
 
 // GetUsers gets player data to populate the player's profile page
-func (*Users) GetUsers() ([]UserAccounts, int, error) {
+func (*Users) GetUsers() ([]UserAccount, int, error) {
 	var rows *sql.Rows
 	if v, err := db.Query(`
 		SELECT
-			u.discord_name,
+		    u.discord_id,
+				u.discord_name
 		FROM
-			users u
-		ORDER BY
-			u.discord_name ASC
-
+		    users u
+		WHERE
+		    u.discord_id IS NOT NULL
+				AND u.discord_name IS NOT NULL
+		ORDER BY u.discord_name ASC
 	`); err == sql.ErrNoRows {
 		return nil, 0, nil
 	} else {
@@ -31,11 +41,12 @@ func (*Users) GetUsers() ([]UserAccounts, int, error) {
 	defer rows.Close()
 
 	// Iterate over the user profile results
-	userAccounts := make([]UserAccounts, 0)
+	userAccounts := make([]UserAccount, 0)
 	for rows.Next() {
-		var row UserAccounts
+		var row UserAccount
 		if err := rows.Scan(
-			&row.Username,
+			&row.DiscordID,
+			&row.DiscordUsername,
 		); err != nil {
 			return nil, 0, err
 		}
@@ -46,11 +57,14 @@ func (*Users) GetUsers() ([]UserAccounts, int, error) {
 	// Find total amount of users
 	var allUsers int
 	if err := db.QueryRow(`
-		SELECT count(id)
+		SELECT count(discord_id)
 		FROM users
+		WHERE discord_id IS NOT NULL
 	`).Scan(&allUsers); err != nil {
 		return nil, 0, err
 	}
 
 	return userAccounts, allUsers, nil
 }
+
+func (*Tables) GetRacersForEvent(eventName) ([]FoundUserNDWC, Totalerr)

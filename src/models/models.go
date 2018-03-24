@@ -17,6 +17,7 @@ var (
 
 // Models for each property represents a database table
 type Models struct {
+	Tables
 	Users
 }
 
