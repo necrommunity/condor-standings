@@ -106,6 +106,9 @@ func httpInit() {
 
 	// Path handlers (for the website)
 	httpRouter.GET("/", httpHome)
+	httpRouter.GET("/api", httpAPI)             // Handles static API
+	httpRouter.GET("/api/:event", httpEventAPI) // Handles specific event calls
+	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 
 	// Figure out the port that we are using for the HTTP server

@@ -66,5 +66,3 @@ func (*Users) GetUsers() ([]UserAccount, int, error) {
 
 	return userAccounts, allUsers, nil
 }
-
-func (*Tables) GetRacersForEvent(eventName) ([]FoundUserNDWC, Totalerr)
