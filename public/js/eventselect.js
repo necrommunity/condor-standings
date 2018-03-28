@@ -11,7 +11,7 @@ function changeEvent(eventName) {
       console.log(tabledata);
       tabledata = tabledata + '<tr><td>' + data.Participants[key]['discordUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td><td>' + data.Participants[key]['groupName'] + '</td></tr>';
     }
-    $('#eventData').html('<table border="1">'+tabledata+'</table>');
+    $('#eventData').html('<table border="1"><tr><th>Name</th><th>Points</th><th>Played</th><th>Group</th></tr>'+tabledata+'</table>');
   });
 
 }

@@ -23,7 +23,7 @@ func (*Tables) GetTables() ([]FoundTable, error) {
     WHERE
       table_schema not in ('information_schema', 'necrobot' )
     ORDER BY
-      table_schema ASC
+      create_time DESC
   `); err == sql.ErrNoRows {
 		return nil, nil
 	} else {
