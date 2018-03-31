@@ -35,7 +35,6 @@ func httpEventAPI(c *gin.Context) {
 	if err != nil {
 		log.Error("Something funky  happened with regex")
 	}
-	log.Info(groups)
 	if groups == true {
 		foundEvent, _ = db.EventAPI.GetEventInfoGroups(event)
 	} else {
