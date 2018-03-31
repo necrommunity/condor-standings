@@ -1,17 +1,39 @@
 {{ define "content" }}
-Welcome to the home page of condor standings
+<!-- Main -->
+<div id="main" class="wrapper style1">
+   <div class="container">
+      <!-- Content -->
+      <section class="" id="content">
+        <header class="major">
+          <div class="row">
+            <div class="12u">
+              <img src="/public/images/condor_logo.png" />
+            </div>
+          </div>
+        </header>
+      </section>
+      <section class="box">
+        Select an event:
+        <div class="row">
 
-Select the event:
-<select onChange='changeEvent(this.value);'>
-  <option value="" selected="selected" disabled>Event</option>
-  {{ range .FoundTables }}
-  <option value="{{ .TableName.Value }}"> {{ .TableName.Value }} </option>
-  {{ end }}
+          <div class="8u 12u">
+            <select id="eventSelector" onChange='changeEvent(this.value);'>
+              <option value="" selected="selected" disabled>Event</option>
+              {{ range .FoundTables }}
+              <option value="{{ .TableName.Value }}"> {{ .TableName.Value }} </option>
+              {{ end }}
 
-</select>
-<div id="eventName">
-</div>
-<div id="eventData">
-</div>
-
+            </select>
+          </div>
+          <div class="4u 12u">
+            <a id="reset" class="button  fit ">Reset</a>
+          </div>
+        </div>
+        <div id="eventName" class="major">
+        </div>
+        <div id="eventData" class="table-wrapper">
+        </div>
+      </section>
+    </div>
+  </div>
 {{ end }}

@@ -28,7 +28,7 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	TheEvent := Event{EventName: eventName, Participants: nil}
 	if v, err := db.Query(`
 		SELECT
-		    u.discord_id AS ID,
+		    u.discord_id AS PlayerID,
 		    u.discord_name AS Username,
 		    SUM(CASE
 		        WHEN rr.rank = 1 THEN 1
@@ -47,7 +47,7 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 		        AND u.discord_name IS NOT NULL
 		        AND e.group IS NOT NULL
 		GROUP BY u.discord_name , e.group
-		ORDER BY e.group DESC , Points DESC , Played DESC
+		ORDER BY e.group DESC , Points DESC , Played DESC , Username ASC
 		`); err == sql.ErrNoRows {
 		return TheEvent, nil
 	} else if err != nil {
