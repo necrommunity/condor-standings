@@ -16,9 +16,19 @@ function changeEvent(eventName) {
   $.get("api/"+eventName, function(data, status){
     //$('#eventName').html('<h2>'+ data.eventName.trim() +'</h2>');
     var tabledata = "";
+    var thereIsAGroup = false;
     for (var key in data.Participants) {
-      tabledata = tabledata + '<tr><td>' + data.Participants[key]['discordUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td><td>' + data.Participants[key]['groupName'] + '</td></tr>';
+      tabledata = tabledata + '<tr><td>' + data.Participants[key]['discordUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td>';
+      if (data.Participants[key]['groupName']) {
+        tabledata = tabledata + '<td>' + data.Participants[key]['groupName'] + '</td>';
+        thereIsAGroup = true;
+      }
+      tabledata = tabledata + '</tr>';
     }
-    $('#eventData').html('<table class="alt" border="1"><thead><tr><th>Name</th><th>Points</th><th>Played</th><th>Group</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+    if (thereIsAGroup) {
+      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Points</th><th>Played</th><th>Group</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+    } else {
+      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Points</th><th>Played</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+    }
   });
 }
