@@ -7,6 +7,11 @@ $(function($) {
     });
   });
 
+  $("#refresh").on("click", function () {
+    changeEvent($("#eventSelector").val());
+  });
+
+
 function changeEvent(eventName) {
   $.get("api/"+eventName, function(data, status){
     //$('#eventName').html('<h2>'+ data.eventName.trim() +'</h2>');
