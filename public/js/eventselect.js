@@ -8,12 +8,16 @@ $(function($) {
   });
 
   $("#refresh").on("click", function () {
-    changeEvent($("#eventSelector").val());
+    var event = $("#eventSelector").val();
+    console.log(event);
+    if (event !== null ){
+      changeEvent();
+    }
   });
 
 
 function changeEvent(eventName) {
-  $.get("api/"+eventName, function(data, status){
+  $.get("api/event/"+eventName, function(data, status){
     //$('#eventName').html('<h2>'+ data.eventName.trim() +'</h2>');
     var tabledata = "";
     var thereIsAGroup = false;
