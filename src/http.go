@@ -32,6 +32,16 @@ var (
 // Data structures
 // ----------------
 
+type APIError struct {
+	ErrorCode    int
+	ErrorMessage string
+}
+
+type Event struct {
+	EventName    string `json:"eventName"`
+	Participants []models.Participant
+}
+
 type TemplateData struct {
 	Title        string
 	UsersTotal   int

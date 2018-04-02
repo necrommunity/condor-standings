@@ -10,6 +10,11 @@ import (
 	"regexp"
 )
 
+// ReturnedTables creates a struct for json output
+type ReturnedTables struct {
+	EventNames []string `json:"eventNames"`
+}
+
 func httpAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
@@ -23,17 +28,13 @@ func httpAPI(c *gin.Context) {
 // @Description Lists all events found by name
 // @Accept json
 // @Produce json
-// @Success 200 {array} string
+// @Success 200 {object} ReturnedTables
 // @Failure 404 {object} APIError "No Events Found"
 // @Router /api/event [get]
 func httpEventDocAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
 	returnedTables := make([]string, 0)
-
-	type ReturnedTables struct {
-		EventNames []string `json:"eventNames"`
-	}
 
 	foundTables, err := db.Tables.GetTables()
 	if err != nil {

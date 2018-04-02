@@ -1,3 +1,11 @@
+// @APIVersion 1.0.0
+// @Title My Cool API
+// @Description My API usually works as expected. But sometimes its not true
+// @Contact sillypairs@gmail.com
+// @TermsOfServiceUrl http://google.com/
+// @License BSD
+// @LicenseUrl http://opensource.org/licenses/BSD-2-Clause
+
 package main // In Go, executable commands must always use package main
 
 import (

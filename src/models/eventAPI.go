@@ -4,10 +4,10 @@ import (
 	"database/sql"
 )
 
-// Users struct captures all users found
+// EventAPI struct captures all users found
 type EventAPI struct{}
 
-// UserAccount gets each row for all profiles
+// Participant gets each row for all profiles
 type Participant struct {
 	DiscordID       int    `json:"discordID"`
 	DiscordUsername string `json:"discordUsername"`
@@ -22,7 +22,7 @@ type Event struct {
 	Participants []Participant
 }
 
-// GetEventInfo gets all needed information about a specific event
+// GetEventInfoGroups gets all needed information about a specific event
 func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	var rows *sql.Rows
 	TheEvent := Event{EventName: eventName, Participants: nil}
@@ -78,7 +78,7 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	return TheEvent, nil
 }
 
-// GetEventInfo
+// GetEventInfo gets specific event info
 func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	var rows *sql.Rows
 	TheEvent := Event{EventName: eventName, Participants: nil}
