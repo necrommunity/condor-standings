@@ -14,7 +14,7 @@ Table of Contents
 |-----|-----|
 | Resource Path | /api |
 | API Version | 1.0.0 |
-| BasePath for the API | {{.}} |
+| BasePath for the API | http://wow.freepizza.how/ |
 | Consumes | application/json |
 | Produces | application/json |
 
