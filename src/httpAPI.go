@@ -18,6 +18,37 @@ func httpAPI(c *gin.Context) {
 
 }
 
+func httpEventDocAPI(c *gin.Context) {
+	// Local variables
+	w := c.Writer
+	returnedTables := make([]string, 0)
+
+	type ReturnedTables struct {
+		EventNames []string `json:"eventNames"`
+	}
+
+	foundTables, err := db.Tables.GetTables()
+	if err != nil {
+		log.Error("Could not get tables: ", err)
+	}
+
+	for _, tname := range foundTables {
+		returnedTables = append(returnedTables, tname.TableName.String)
+	}
+
+	var TablesReturned ReturnedTables
+	TablesReturned.EventNames = returnedTables
+	w.Header().Set("Content-Type", "application/json")
+	jsonData, err := json.MarshalIndent(TablesReturned, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		//w.Write([]byte("Please search for a user"))
+		return
+	}
+	w.Write(jsonData)
+
+}
+
 func httpEventAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
