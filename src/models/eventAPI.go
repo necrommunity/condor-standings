@@ -9,7 +9,6 @@ type EventAPI struct{}
 
 // Participant gets each row for all profiles
 type Participant struct {
-	DiscordID       int    `json:"discordID"`
 	DiscordUsername string `json:"discordUsername"`
 	EventPoints     int    `json:"eventPoints"`
 	EventPlayed     int    `json:"eventPlayed"`
@@ -28,7 +27,6 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	TheEvent := Event{EventName: eventName, Participants: nil}
 	if v, err := db.Query(`
 		SELECT
-		    u.discord_id AS PlayerID,
 		    u.discord_name AS Username,
 		    SUM(CASE
 		        WHEN rr.rank = 1 THEN 1
@@ -62,7 +60,6 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	for rows.Next() {
 		var participant Participant
 		if err := rows.Scan(
-			&participant.DiscordID,
 			&participant.DiscordUsername,
 			&participant.EventPoints,
 			&participant.EventPlayed,
@@ -84,7 +81,6 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	TheEvent := Event{EventName: eventName, Participants: nil}
 	if v, err := db.Query(`
 		SELECT
-		    u.discord_id AS ID,
 		    u.discord_name AS Username,
 		    SUM(CASE
 		        WHEN rr.rank = 1 THEN 1
@@ -116,7 +112,6 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	for rows.Next() {
 		var participant Participant
 		if err := rows.Scan(
-			&participant.DiscordID,
 			&participant.DiscordUsername,
 			&participant.EventPoints,
 			&participant.EventPlayed,

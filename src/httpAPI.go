@@ -3,11 +3,17 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
 	"github.com/sillypears/condor-standings/src/models"
 
 	"regexp"
+)
+
+var (
+	staticContent = flag.String("staticPath", "../public/swagger-ui", "Path to folder with Swagger UI")
+	apiurl        = flag.String("api", "http://127.0.0.1", "The base path URI of the API service")
 )
 
 // ReturnedTables creates a struct for json output
@@ -20,7 +26,15 @@ func httpAPI(c *gin.Context) {
 	w := c.Writer
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte("{\"Documentation\": \"API Documentation\" }"))
+	jsonData, err := json.Marshal(json.RawMessage(apiDescriptionsJson))
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		//w.Write([]byte("Please search for a user"))
+		return
+	}
+	//log.Info()
+	w.Write(jsonData)
+	//w.Write([]byte("{\"Documentation\": \"API Documentation\" }"))
 
 }
 
