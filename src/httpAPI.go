@@ -1,3 +1,4 @@
+// @SubApi API [/api]
 package main
 
 import (
@@ -18,6 +19,13 @@ func httpAPI(c *gin.Context) {
 
 }
 
+// @Title Events
+// @Description Lists all events found by name
+// @Accept json
+// @Produce json
+// @Success 200 {array} string
+// @Failure 404 {object} APIError "No Events Found"
+// @Router /api/event [get]
 func httpEventDocAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
@@ -38,6 +46,7 @@ func httpEventDocAPI(c *gin.Context) {
 
 	var TablesReturned ReturnedTables
 	TablesReturned.EventNames = returnedTables
+
 	w.Header().Set("Content-Type", "application/json")
 	jsonData, err := json.MarshalIndent(TablesReturned, "", "\t")
 	if err != nil {
@@ -49,6 +58,14 @@ func httpEventDocAPI(c *gin.Context) {
 
 }
 
+// @Title Event Listing
+// @Description Lists everything found for the event
+// @Accept json
+// @Produce json
+// @Param event	path	string	true	"Event Name"
+// @Success 200 {object} Event
+// @Failure 404 {object} APIError "Event not found"
+// @Router /api/event/{event} [get]
 func httpEventAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
