@@ -22,7 +22,7 @@ function changeEvent(eventName) {
     var tabledata = "";
     var thereIsAGroup = false;
     for (var key in data.Participants) {
-      tabledata = tabledata + '<tr><td>' + data.Participants[key]['discordUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td>';
+      tabledata = tabledata + '<tr><td><a href="https://www.twitch.tv/' + data.Participants[key]['twitchUsername'] + '" target="_blank" >' + data.Participants[key]['twitchUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td>';
       if (data.Participants[key]['groupName']) {
         tabledata = tabledata + '<td>' + data.Participants[key]['groupName'] + '</td>';
         thereIsAGroup = true;

@@ -11,12 +11,14 @@ type Users struct{}
 type UserAccount struct {
 	DiscordID       sql.NullInt64
 	DiscordUsername sql.NullString
+	TwitchUsername  sql.NullString
 }
 
 // FoundUserNDWC struct stores the info needed for NDWC events
 type FoundUserNDWC struct {
 	DiscordID       sql.NullInt64
 	DiscordUsername sql.NullInt64
+	TwitchUsername  sql.NullString
 	NDWCGroup       sql.NullString
 }
 
@@ -26,7 +28,8 @@ func (*Users) GetUsers() ([]UserAccount, int, error) {
 	if v, err := db.Query(`
 		SELECT
 		    u.discord_id,
-				u.discord_name
+				u.discord_name,
+				u.twitch_name
 		FROM
 		    users u
 		WHERE
@@ -47,6 +50,7 @@ func (*Users) GetUsers() ([]UserAccount, int, error) {
 		if err := rows.Scan(
 			&row.DiscordID,
 			&row.DiscordUsername,
+			&row.TwitchUsername,
 		); err != nil {
 			return nil, 0, err
 		}

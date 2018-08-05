@@ -10,6 +10,7 @@ type EventAPI struct{}
 // Participant gets each row for all profiles
 type Participant struct {
 	DiscordUsername string `json:"discordUsername"`
+	TwitchUsername  string `json:"twitchUsername"`
 	EventPoints     int    `json:"eventPoints"`
 	EventPlayed     int    `json:"eventPlayed"`
 	GroupName       string `json:"groupName"`
@@ -27,23 +28,25 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	TheEvent := Event{EventName: eventName, Participants: nil}
 	if v, err := db.Query(`
 		SELECT
-		    u.discord_name AS Username,
-		    SUM(CASE
-		        WHEN rr.rank = 1 THEN 1
-		        ELSE 0
-		    END) AS Points,
-		    COUNT(rr.user_id) AS Played,
-		    e.group
+			u.discord_name AS Username,
+			u.twitch_name AS tUsername,
+			SUM(CASE
+				WHEN rr.rank = 1 THEN 1
+			ELSE 0
+			END) AS Points,
+			COUNT(rr.user_id) AS Played,
+			e.group
 		FROM
-		    ` + eventName + `.entrants e
-		        LEFT JOIN
-		    necrobot.users u ON u.user_id = e.user_id
-		        LEFT JOIN
-		    ` + eventName + `.race_runs rr ON rr.user_id = e.user_id
+			` + eventName + `.entrants e
+			LEFT JOIN
+				necrobot.users u ON u.user_id = e.user_id
+			LEFT JOIN
+				` + eventName + `.race_runs rr ON rr.user_id = e.user_id
 		WHERE
-		    u.discord_id IS NOT NULL
-		        AND u.discord_name IS NOT NULL
-		        AND e.group IS NOT NULL
+			u.discord_id IS NOT NULL
+			AND u.discord_name IS NOT NULL
+			AND u.twitch_name IS NOT NULL
+			AND e.group IS NOT NULL
 		GROUP BY u.discord_name , e.group
 		ORDER BY e.group DESC , Points DESC , Played DESC , Username ASC
 		`); err == sql.ErrNoRows {
@@ -61,6 +64,7 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 		var participant Participant
 		if err := rows.Scan(
 			&participant.DiscordUsername,
+			&participant.TwitchUsername,
 			&participant.EventPoints,
 			&participant.EventPlayed,
 			&participant.GroupName,
@@ -82,6 +86,7 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	if v, err := db.Query(`
 		SELECT
 		    u.discord_name AS Username,
+				u.twitch_name as tUsername,
 		    SUM(CASE
 		        WHEN rr.rank = 1 THEN 1
 		        ELSE 0
@@ -94,8 +99,9 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 		        LEFT JOIN
 		    ` + eventName + `.race_runs rr ON rr.user_id = e.user_id
 		WHERE
-		    u.discord_id IS NOT NULL
-		        AND u.discord_name IS NOT NULL
+			u.discord_id IS NOT NULL
+			AND u.discord_name IS NOT NULL
+			AND u.twitch_name IS NOT NULL
 		GROUP BY u.discord_name
 		ORDER BY Points DESC , Played DESC
 		`); err == sql.ErrNoRows {
@@ -113,6 +119,7 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 		var participant Participant
 		if err := rows.Scan(
 			&participant.DiscordUsername,
+			&participant.TwitchUsername,
 			&participant.EventPoints,
 			&participant.EventPlayed,
 		); err != nil {
