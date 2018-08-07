@@ -134,3 +134,4 @@ func httpTeamAPI(c *gin.Context) {
 	}
 	w.Write(jsonData)
 }
+

@@ -1,0 +1,36 @@
+{{ define "content" }}
+<!-- Main -->
+<div id="main" class="wrapper style1">
+   <div class="container">
+      <!-- Content -->
+      <center>
+        <section id="upper">
+          <header class="">
+            <div class="row">
+              <div class="12u">
+                <a href="/"><img src="/public/images/condor_logo.png" /></a>
+              </div>
+            </div>
+          </header>
+        </section>
+      </center>
+      <section class="box">
+        <table class="table" id="results-table">
+          <tr>
+            <th></th>
+          {{ range $key, $value := .Teams }}
+              <th> {{ $key }} </th>
+          {{ end }}
+          </tr>
+          {{ range $index, $element := .Teams }}
+            <tr><td> {{ $index }}</td>
+            {{ range $key, $value := $element }}
+                <td> {{ $value }} </td>
+            {{ end }}
+            </tr>
+          {{ end }}
+        </table>
+            </section>
+          </div>
+        </div>
+{{ end }}

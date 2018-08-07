@@ -47,6 +47,7 @@ type TemplateData struct {
 	UsersTotal   int
 	UserAccounts []models.UserAccount
 	FoundTables  []models.FoundTable
+	Teams        map[string]map[string]int
 }
 
 //  -----------------------
@@ -116,6 +117,7 @@ func httpInit() {
 
 	// Path handlers (for the website)
 	httpRouter.GET("/", httpHome)
+	httpRouter.GET("/teamresults", httpTeamResults)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
