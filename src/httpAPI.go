@@ -114,5 +114,23 @@ func httpEventAPI(c *gin.Context) {
 		return
 	}
 	w.Write(jsonData)
+}
 
+// httpTeamAPI gets the team results and returns json
+func httpTeamAPI(c *gin.Context) {
+	w := c.Writer
+
+	w.Header().Set("Content-Type", "application/json")
+
+	results, err := db.TeamAPI.GetResults()
+	if err != nil {
+		log.Error("Couldn't get team info, ", err)
+	}
+
+	jsonData, err := json.MarshalIndent(results, "", "\t")
+	if err != nil {
+		log.Error("Couldn't parse results: ", err)
+		return
+	}
+	w.Write(jsonData)
 }

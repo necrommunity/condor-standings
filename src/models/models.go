@@ -19,6 +19,7 @@ var (
 type Models struct {
 	EventAPI
 	Tables
+	TeamAPI
 	Users
 }
 

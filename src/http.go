@@ -119,6 +119,7 @@ func httpInit() {
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
+	httpRouter.GET("/api/teamresults", httpTeamAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 
