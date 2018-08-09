@@ -17,3 +17,31 @@ a:active {
     text-decoration: none !important;
     border-bottom: 0px;
 }
+
+th.th-Total {
+  border-left: solid 1px rgba(255, 255, 255, 0.3);
+  border-right: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+th.results {
+  text-align: center;
+}
+
+th.blank {
+    border-left: solid 1px rgba(255, 255, 255, 0.3);
+    border-right: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+td.td-header {
+  border-left: solid 1px rgba(255, 255, 255, 0.3);
+  border-right: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+td.td-Total {
+  border-left: solid 1px rgba(255, 255, 255, 0.3);
+  border-right: solid 1px rgba(255, 255, 255, 0.3);
+}
+
+td.results {
+  text-align: center;
+}

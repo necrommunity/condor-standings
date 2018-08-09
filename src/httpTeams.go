@@ -13,13 +13,6 @@ import (
 )
 
 // Teams is a var for each team
-type Teams struct {
-	DarkCookies    int `json:"Dark Cookies"`
-	FrozenCheese   int `json:"Frozen Cheese"`
-	ItalianCarrots int `json:"Italian Carrots"`
-	RegularHam     int `json:"Regular Ham"`
-	StinkinRebels  int `json:"Stinkin' Rebels"`
-}
 
 func getProp(t models.Result, field string) string {
 	r := reflect.ValueOf(t)
@@ -65,6 +58,7 @@ func httpTeamResults(c *gin.Context) {
 			"Italian Carrots": 0,
 			"Regular Ham":     0,
 			"Stinkin' Rebels": 0,
+			"Total":           0,
 		},
 		"Frozen Cheese": map[string]int{
 			"Dark Cookies":    0,
@@ -72,6 +66,7 @@ func httpTeamResults(c *gin.Context) {
 			"Italian Carrots": 0,
 			"Regular Ham":     0,
 			"Stinkin' Rebels": 0,
+			"Total":           0,
 		},
 		"Italian Carrots": map[string]int{
 			"Dark Cookies":    0,
@@ -79,6 +74,7 @@ func httpTeamResults(c *gin.Context) {
 			"Italian Carrots": 0,
 			"Regular Ham":     0,
 			"Stinkin' Rebels": 0,
+			"Total":           0,
 		},
 		"Regular Ham": map[string]int{
 			"Dark Cookies":    0,
@@ -86,6 +82,7 @@ func httpTeamResults(c *gin.Context) {
 			"Italian Carrots": 0,
 			"Regular Ham":     0,
 			"Stinkin' Rebels": 0,
+			"Total":           0,
 		},
 		"Stinkin' Rebels": map[string]int{
 			"Dark Cookies":    0,
@@ -93,6 +90,7 @@ func httpTeamResults(c *gin.Context) {
 			"Italian Carrots": 0,
 			"Regular Ham":     0,
 			"Stinkin' Rebels": 0,
+			"Total":           0,
 		},
 	}
 
@@ -108,13 +106,17 @@ func httpTeamResults(c *gin.Context) {
 		tWinner := getProp(Results[i], tWin)
 		tLoser := getProp(Results[i], tLos)
 		wins := team[tWinner][tLoser]
+		team[tWinner]["Total"] = team[tWinner]["Total"] + 1
 		team[tWinner][tLoser] = wins + 1
 	}
 
+	headings := []string{"Dark Cookies", "Frozen Cheese", "Italian Carrots", "Regular Ham", "Stinkin' Rebels", "Total"}
+
 	// Send data to template
 	data := TemplateData{
-		Title: "Team Results",
-		Teams: team,
+		Title:   "Team Results",
+		Results: team,
+		Headers: headings,
 	}
 	httpServeTemplate(w, "teamresults", data)
 }
