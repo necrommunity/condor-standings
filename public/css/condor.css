@@ -45,3 +45,32 @@ td.td-Total {
 td.results {
   text-align: center;
 }
+
+th.th-team-Dark.Cookies {
+  text-align: center;
+  background-color: rgb(84, 110, 122);
+}
+
+th.th-team-Frozen.Cheese {
+  text-align: center;
+  background-color: rgb(32, 102, 148);
+}
+
+th.th-team-Italian.Carrots {
+  text-align: center;
+  background-color: rgb(31, 139, 76);
+}
+
+th.th-team-Regular.Hams {
+  text-align: center;
+  background-color: rgb(153, 45, 34);
+}
+
+th.th-team-Stinkin\'.Rebels {
+  text-align: center;
+  background-color: rgb(194, 124, 14);
+}
+
+td div.div-racer {
+  text-align: center;
+}

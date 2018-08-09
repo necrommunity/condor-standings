@@ -31,7 +31,25 @@
             </tr>
           {{ end }}
         </table>
-            </section>
-          </div>
-        </div>
+      </section>
+      <section id="team-list">
+        <table id="table-team-list">
+          <tr>
+          {{ range $index, $element := .TeamList }}
+            <th class="th-team-{{ $index }}"> {{ $index }} </th>
+          {{ end }}
+          </tr>
+          <tr>
+          {{ range $key, $value := .TeamList }}
+            <td id="td-team-{{ $key }}" class="td-team">
+            {{ range $racer := $value }}
+              <div class="div-racer"> {{ $racer }} </div>
+            {{ end }}
+            </td>
+          {{ end }}
+          </tr>
+        </table>
+      </section>
+    </div>
+  </div>
 {{ end }}

@@ -109,14 +109,86 @@ func httpTeamResults(c *gin.Context) {
 		team[tWinner]["Total"] = team[tWinner]["Total"] + 1
 		team[tWinner][tLoser] = wins + 1
 	}
-
+	teamList := map[string][]string{
+		"Dark Cookies": []string{
+			"abu__yazan",
+			"biggiemac42",
+			"chef_mayhem",
+			"Flygluffet",
+			"incnone",
+			"Jamblur",
+			"JustSparkyYes",
+			"Kova46",
+			"Lucoa",
+			"mantasMBL",
+			"Megamissingn0",
+			"Spootybiscuit",
+		},
+		"Frozen Cheese": []string{
+			"arborelia",
+			"bastet222",
+			"dsmidna",
+			"duneaught",
+			"firebrde",
+			"Kailaria",
+			"moyuma",
+			"Squega",
+			"Staekk",
+			"wow_tomato",
+			"yamiramiz",
+			"Zomblar",
+		},
+		"Italian Carrots": []string{
+			"ARTQ",
+			"Black",
+			"Cyber_1",
+			"Minhs2",
+			"mpr",
+			"pancelor",
+			"professionaltwitchtroll",
+			"ratata_ratata",
+			"Revalize",
+			"Siveure",
+			"thedarkfreaaack",
+			"yuka34",
+		},
+		"Regular Hams": []string{
+			"alex42918",
+			"Ancalagor",
+			"definitely_not_HIM",
+			"EpicSuccess",
+			"JackOfGames",
+			"mudjoe2",
+			"Paratroopa1",
+			"ptrevortactyl",
+			"Rotomington",
+			"saakas0206",
+			"sillypears?!?",
+			"uniowen",
+		},
+		"Stinkin' Rebels": []string{
+			"brumekuroi",
+			"ekimekim",
+			"fiverfiverone",
+			"KingTorture",
+			"Ratracing",
+			"reijigazpacho",
+			"RoyalGoof",
+			"sailormint",
+			"seanpwolf",
+			"supervillain_joe",
+			"tetel",
+			"Tufwfo",
+		},
+	}
 	headings := []string{"Dark Cookies", "Frozen Cheese", "Italian Carrots", "Regular Ham", "Stinkin' Rebels", "Total"}
 
 	// Send data to template
 	data := TemplateData{
-		Title:   "Team Results",
-		Results: team,
-		Headers: headings,
+		Title:    "Team Results",
+		Results:  team,
+		Headers:  headings,
+		TeamList: teamList,
 	}
 	httpServeTemplate(w, "teamresults", data)
 }
