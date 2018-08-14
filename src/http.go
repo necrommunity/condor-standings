@@ -15,6 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
 	"github.com/sillypears/condor-standings/src/models"
+	"github.com/thinkerou/favicon"
 )
 
 const (
@@ -60,6 +61,7 @@ func httpInit() {
 	// Create a new Gin HTTP router
 	gin.SetMode(gin.ReleaseMode) // Comment this out to debug HTTP stuff
 	httpRouter := gin.Default()
+	httpRouter.Use(favicon.New("../public/favicon.ico"))
 
 	// Read some HTTP server configuration values from environment variables
 	// (they were loaded from the .env file in main.go)

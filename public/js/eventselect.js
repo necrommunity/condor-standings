@@ -11,7 +11,7 @@ $(function($) {
     var event = $("#eventSelector").val();
     console.log(event);
     if (event !== null ){
-      changeEvent();
+      changeEvent(event);
     }
   });
 
