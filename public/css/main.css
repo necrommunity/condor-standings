@@ -3999,3 +3999,26 @@
 					}
 
 	}
+
+	a > img.github-logo {
+	  vertical-align: middle;
+	}
+	a.github:link {
+	    text-decoration: none !important;
+	    border-bottom: 0px;
+	}
+
+	a.github:visited {
+	    text-decoration: none !important;
+	    border-bottom: 0px
+	}
+
+	a.github:hover {
+	    text-decoration: none !important;
+	    border-bottom: 0px;
+	}
+
+	a.github:active {
+	    text-decoration: none !important;
+	    border-bottom: 0px;
+	}
