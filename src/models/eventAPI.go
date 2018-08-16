@@ -14,6 +14,7 @@ type Participant struct {
 	EventPoints     int    `json:"eventPoints"`
 	EventPlayed     int    `json:"eventPlayed"`
 	GroupName       string `json:"groupName"`
+	TierName        string `json:"tierName"`
 }
 
 // Event holds the event information

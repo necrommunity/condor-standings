@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
 	"github.com/sillypears/condor-standings/src/models"
+	"strings"
 
 	"regexp"
 )
@@ -23,6 +24,7 @@ type ReturnedTables struct {
 
 func httpAPI(c *gin.Context) {
 	// Local variables
+
 	w := c.Writer
 
 	w.Header().Set("Content-Type", "application/json")
@@ -48,6 +50,7 @@ func httpAPI(c *gin.Context) {
 func httpEventDocAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
+
 	returnedTables := make([]string, 0)
 
 	foundTables, err := db.Tables.GetTables()
@@ -83,6 +86,70 @@ func httpEventDocAPI(c *gin.Context) {
 // @Router /api/event/{event} [get]
 func httpEventAPI(c *gin.Context) {
 	// Local variables
+	tiers := map[string]string{
+		"squega":                  "Crystal",
+		"incnone":                 "Crystal",
+		"thedarkfreaack":          "Crystal",
+		"royalgoof":               "Crystal",
+		"spootybiscuit":           "Crystal",
+		"jackofgames":             "Crystal",
+		"moyuma":                  "Crystal",
+		"mudjoe2":                 "Crystal",
+		"tufwfo":                  "Crystal",
+		"abu__yazan":              "Crystal",
+		"pancelor":                "Crystal",
+		"staekk":                  "Crystal",
+		"artq":                    "Obsidian",
+		"mayaundefined":           "Obsidian",
+		"ptrevordactyl":           "Obsidian",
+		"yuka34":                  "Obsidian",
+		"kingtorture":             "Obsidian",
+		"reijigazpacho":           "Obsidian",
+		"tetel__":                 "Obsidian",
+		"biggiemac42":             "Obsidian",
+		"cyber_1":                 "Obsidian",
+		"mantasmbl":               "Obsidian",
+		"paratroopa1":             "Obsidian",
+		"ratata_ratata":           "Obsidian",
+		"siveure":                 "Obsidian",
+		"call_me_kaye":            "Obsidian",
+		"ratracing":               "Obsidian",
+		"revalize":                "Obsidian",
+		"alex42918":               "Titanium",
+		"duneaught":               "Titanium",
+		"sailormint":              "Titanium",
+		"ancalagor":               "Titanium",
+		"chef_mayhem":             "Titanium",
+		"flygluffet":              "Titanium",
+		"supervillain_joe":        "Titanium",
+		"wuffwuff":                "Titanium",
+		"definitely_not_him":      "Titanium",
+		"ekimekim":                "Titanium",
+		"lucoa":                   "Titanium",
+		"minhs2":                  "Titanium",
+		"bastet222":               "Titanium",
+		"saakas0206":              "Titanium",
+		"seanpwolf":               "Titanium",
+		"yamiramiz":               "Titanium",
+		"uniowen":                 "Blood",
+		"justsparkyyes":           "Blood",
+		"megamissingn0":           "Blood",
+		"professionaltwitchtroll": "Blood",
+		"slimo":                   "Blood",
+		"kailaria":                "Blood",
+		"fiverfiverone":           "Blood",
+		"arborelia":               "Blood",
+		"brumekuroi":              "Blood",
+		"cohomerlogist":           "Blood",
+		"dsmidna":                 "Blood",
+		"epicsuccess":             "Blood",
+		"firebrde":                "Blood",
+		"jamblar":                 "Blood",
+		"kova46":                  "Blood",
+		"rachelsatx":              "Blood",
+		"rotomington":             "Blood",
+		"wow_tomato":              "Blood",
+	}
 	w := c.Writer
 	var foundEvent models.Event
 	// Set the header
@@ -106,6 +173,30 @@ func httpEventAPI(c *gin.Context) {
 	if err != nil {
 		log.Error("Couldn't get event info: ", err)
 	}
+	season, err := regexp.MatchString("season_*", event)
+	if err != nil {
+		log.Error("Regex is bad")
+	}
+
+	editedEvent := models.Event{
+		EventName: foundEvent.EventName,
+	}
+	var parts []models.Participant
+
+	if season == true {
+		for _, participant := range foundEvent.Participants {
+			part := models.Participant{
+				DiscordUsername: participant.DiscordUsername,
+				TwitchUsername:  participant.TwitchUsername,
+				EventPoints:     participant.EventPoints,
+				EventPlayed:     participant.EventPlayed,
+				TierName:        tiers[strings.ToLower(participant.TwitchUsername)],
+			}
+			parts = append(parts, part)
+		}
+		editedEvent.Participants = parts
+		foundEvent = editedEvent
+	}
 
 	jsonData, err := json.MarshalIndent(foundEvent, "", "\t")
 	if err != nil {
@@ -113,6 +204,7 @@ func httpEventAPI(c *gin.Context) {
 		//w.Write([]byte("Please search for a user"))
 		return
 	}
+
 	w.Write(jsonData)
 }
 
@@ -134,4 +226,3 @@ func httpTeamAPI(c *gin.Context) {
 	}
 	w.Write(jsonData)
 }
-
