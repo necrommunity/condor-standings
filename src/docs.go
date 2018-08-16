@@ -1,24 +1,39 @@
-
 package main
+
 //This file is generated automatically. Do not try to edit it manually.
+
+var resourceListingJson = `{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://wow.freepizza.how/",
+    "apis": [
+        {
+            "path": "/api",
+            "description": "API"
+        }
+    ],
+    "info": {
+        "contact": "sillypairs@gmail.com",
+        "termsOfServiceUrl": "http://google.com/",
+        "license": "BSD",
+        "licenseUrl": "http://opensource.org/licenses/BSD-2-Clause"
+    }
+}`
 var apiDescriptionsJson = `{
     "apiVersion": "1.0.0",
     "swaggerVersion": "1.2",
     "basePath": "http://wow.freepizza.how/",
+    "resourcePath": "/api",
+    "produces": [
+        "application/json"
+    ],
     "info": {
         "contact": "sillypairs@gmail.com",
         "termsOfServiceUrl": "http://google.com/",
         "license": "BSD",
         "licenseUrl": "http://opensource.org/licenses/BSD-2-Clause"
     },
-    "produces": [
-        "application/json"
-    ],
     "apis": [
-        {
-            "path": "/api",
-            "description": "API"
-        },
         {
             "path": "/api/event",
             "description": "Lists all events found by name",
@@ -92,6 +107,36 @@ var apiDescriptionsJson = `{
                     ]
                 }
             ]
+        },
+        {
+            "path": "/api/teamresults",
+            "description": "Lists everything found for the season 7 teams",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "Team Results Listing",
+                    "type": "github.com.sillypears.condor-standings.src.models.Result",
+                    "items": {},
+                    "summary": "Lists everything found for the season 7 teams",
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "",
+                            "responseType": "object",
+                            "responseModel": "github.com.sillypears.condor-standings.src.models.Result"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Nothing found",
+                            "responseType": "object",
+                            "responseModel": "github.com.sillypears.condor-standings.src.APIError"
+                        }
+                    ],
+                    "produces": [
+                        "application/json"
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -147,12 +192,6 @@ var apiDescriptionsJson = `{
         "github.com.sillypears.condor-standings.src.models.Participant": {
             "id": "github.com.sillypears.condor-standings.src.models.Participant",
             "properties": {
-                "discordID": {
-                    "type": "int",
-                    "description": "",
-                    "items": {},
-                    "format": ""
-                },
                 "discordUsername": {
                     "type": "string",
                     "description": "",
@@ -173,6 +212,53 @@ var apiDescriptionsJson = `{
                 },
                 "groupName": {
                     "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "tierName": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "twitchUsername": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                }
+            }
+        },
+        "github.com.sillypears.condor-standings.src.models.Result": {
+            "id": "github.com.sillypears.condor-standings.src.models.Result",
+            "properties": {
+                "racer1": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "racer2": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "team1": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "team2": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "winner": {
+                    "type": "int",
                     "description": "",
                     "items": {},
                     "format": ""

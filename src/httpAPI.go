@@ -31,18 +31,16 @@ func httpAPI(c *gin.Context) {
 	jsonData, err := json.Marshal(json.RawMessage(apiDescriptionsJson))
 	if err != nil {
 		log.Error("Couldn't generate JSON")
-		//w.Write([]byte("Please search for a user"))
 		return
 	}
-	//log.Info()
+
 	w.Write(jsonData)
-	//w.Write([]byte("{\"Documentation\": \"API Documentation\" }"))
 
 }
 
 // @Title Events
 // @Description Lists all events found by name
-// @Accept json
+// @Accept plain
 // @Produce json
 // @Success 200 {object} ReturnedTables
 // @Failure 404 {object} APIError "No Events Found"
@@ -78,12 +76,13 @@ func httpEventDocAPI(c *gin.Context) {
 
 // @Title Event Listing
 // @Description Lists everything found for the event
-// @Accept json
+// @Accept plain
 // @Produce json
 // @Param event	path	string	true	"Event Name"
 // @Success 200 {object} Event
 // @Failure 404 {object} APIError "Event not found"
 // @Router /api/event/{event} [get]
+// httpEventAPI gets listings for the events
 func httpEventAPI(c *gin.Context) {
 	// Local variables
 	tiers := map[string]string{
@@ -208,6 +207,13 @@ func httpEventAPI(c *gin.Context) {
 	w.Write(jsonData)
 }
 
+// @Title Team Results Listing
+// @Description Lists everything found for the season 7 teams
+// @Accept plain
+// @Produce json
+// @Success 200 {object} models.Result
+// @Failure 404 {object} APIError "Nothing found"
+// @Router /api/teamresults [get]
 // httpTeamAPI gets the team results and returns json
 func httpTeamAPI(c *gin.Context) {
 	w := c.Writer
