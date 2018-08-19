@@ -15,7 +15,7 @@ Table of Contents
 | Resource Path | /api |
 | API Version | 1.0.0 |
 | BasePath for the API | http://wow.freepizza.how/ |
-| Consumes | application/json |
+| Consumes | text/plain |
 | Produces | application/json |
 
 
@@ -27,6 +27,7 @@ Table of Contents
 |-----|-----|-----|
 | /api/event | [GET](#Events) | Lists all events found by name |
 | /api/event/\{event\} | [GET](#Event Listing) | Lists everything found for the event |
+| /api/teamresults | [GET](#Team Results Listing) | Lists everything found for the season 7 teams |
 
 
 
@@ -41,8 +42,8 @@ Lists all events found by name
 
 | Code | Type | Model | Message |
 |-----|-----|-----|-----|
-| 200 | object | [ReturnedTables](#github.com.sillypears.condor-standings.src.ReturnedTables) |  |
-| 404 | object | [APIError](#github.com.sillypears.condor-standings.src.APIError) | No Events Found |
+| 200 | object | [ReturnedTables](#github.com.sillypears.condor-standings.src..ReturnedTables) |  |
+| 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | No Events Found |
 
 
 <a name="Event Listing"></a>
@@ -61,15 +62,30 @@ Lists everything found for the event
 
 | Code | Type | Model | Message |
 |-----|-----|-----|-----|
-| 200 | object | [Event](#github.com.sillypears.condor-standings.src.Event) |  |
-| 404 | object | [APIError](#github.com.sillypears.condor-standings.src.APIError) | Event not found |
+| 200 | object | [Event](#github.com.sillypears.condor-standings.src..Event) |  |
+| 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | Event not found |
+
+
+<a name="Team Results Listing"></a>
+
+#### API: /api/teamresults (GET)
+
+
+Lists everything found for the season 7 teams
+
+
+
+| Code | Type | Model | Message |
+|-----|-----|-----|-----|
+| 200 | object | [Result](#github.com.sillypears.condor-standings.src.models.Result) |  |
+| 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | Nothing found |
 
 
 
 
 ### Models
 
-<a name="github.com.sillypears.condor-standings.src.APIError"></a>
+<a name="github.com.sillypears.condor-standings.src..APIError"></a>
 
 #### APIError
 
@@ -78,7 +94,7 @@ Lists everything found for the event
 | ErrorCode | int |  |
 | ErrorMessage | string |  |
 
-<a name="github.com.sillypears.condor-standings.src.Event"></a>
+<a name="github.com.sillypears.condor-standings.src..Event"></a>
 
 #### Event
 
@@ -87,7 +103,7 @@ Lists everything found for the event
 | Participants | array |  |
 | eventName | string |  |
 
-<a name="github.com.sillypears.condor-standings.src.ReturnedTables"></a>
+<a name="github.com.sillypears.condor-standings.src..ReturnedTables"></a>
 
 #### ReturnedTables
 
@@ -101,10 +117,23 @@ Lists everything found for the event
 
 | Field Name (alphabetical) | Field Type | Description |
 |-----|-----|-----|
-| discordID | int |  |
 | discordUsername | string |  |
 | eventPlayed | int |  |
 | eventPoints | int |  |
 | groupName | string |  |
+| tierName | string |  |
+| twitchUsername | string |  |
+
+<a name="github.com.sillypears.condor-standings.src.models.Result"></a>
+
+#### Result
+
+| Field Name (alphabetical) | Field Type | Description |
+|-----|-----|-----|
+| racer1 | string |  |
+| racer2 | string |  |
+| team1 | string |  |
+| team2 | string |  |
+| winner | int |  |
 
 
