@@ -20,7 +20,7 @@
 
           <div class="8u 12u">
             <select id="eventSelector" onChange='changeEvent(this.value);'>
-              <option value="" selected="selected" disabled>Events</option>
+              <option value="" disabled>Events</option>
               {{ range .FoundTables }}
               <option value="{{ .TableName.Value }}"> {{ .TableName.Value }} </option>
               {{ end }}

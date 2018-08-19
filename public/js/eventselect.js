@@ -1,4 +1,6 @@
 $(function($) {
+  // $("#eventSelector").val($("#eventSelector").data("default-value"));
+
   $("#reset").on("click", function () {
       $("#eventSelector").val($("#eventSelector").data("default-value"));
       $("#eventName").html('');
@@ -14,7 +16,8 @@ $(function($) {
       changeEvent(event);
     }
   });
-
+  
+  
 
 function changeEvent(eventName) {
   $.get("api/event/"+eventName, function(data, status){
@@ -42,3 +45,7 @@ function changeEvent(eventName) {
     }
   });
 }
+
+$( window ).on( "load", function() {
+  changeEvent($("#eventSelector")[0][1].value); 
+});
