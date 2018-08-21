@@ -87,78 +87,6 @@ func httpEventDocAPI(c *gin.Context) {
 func httpEventAPI(c *gin.Context) {
 	// Local variables
 
-	// <rant>
-	// This is fucking terrible and you should never actually do this but circumstances
-	// have lead to things being forced like this and I can't do much about it
-	// so here we are. Live and learn children.
-	// </rant>
-	tiers := map[string]string{
-		strings.ToLower("abu__yazan"):              "Crystal",
-		strings.ToLower("incnone"):                 "Crystal",
-		strings.ToLower("jackofgames"):             "Crystal",
-		strings.ToLower("mayaundefined"):           "Crystal",
-		strings.ToLower("mudjoe2"):                 "Crystal",
-		strings.ToLower("pancelor"):                "Crystal",
-		strings.ToLower("ptrevordactyl"):           "Crystal",
-		strings.ToLower("RoyalGoof"):               "Crystal",
-		strings.ToLower("spootybiscuit"):           "Crystal",
-		strings.ToLower("Squega"):                  "Crystal",
-		strings.ToLower("Staekk"):                  "Crystal",
-		strings.ToLower("thedarkfreaack"):          "Crystal",
-		strings.ToLower("Tufwfo"):                  "Crystal",
-		strings.ToLower("ARTQ"):                    "Obsidian",
-		strings.ToLower("biggiemac42"):             "Obsidian",
-		strings.ToLower("cyber_1"):                 "Obsidian",
-		strings.ToLower("kingtorture"):             "Obsidian",
-		strings.ToLower("mantasmbl"):               "Obsidian",
-		strings.ToLower("moyuma"):                  "Obsidian",
-		strings.ToLower("Paratroopa1"):             "Obsidian",
-		strings.ToLower("ratata_ratata"):           "Obsidian",
-		strings.ToLower("Ratracing"):               "Obsidian",
-		strings.ToLower("raviolinguini"):           "Obsidian",
-		strings.ToLower("reijigazpacho"):           "Obsidian",
-		strings.ToLower("Revalize"):                "Obsidian",
-		strings.ToLower("Siveure"):                 "Obsidian",
-		strings.ToLower("supervillain_joe"):        "Obsidian",
-		strings.ToLower("tetel__"):                 "Obsidian",
-		strings.ToLower("yuka34"):                  "Obsidian",
-		strings.ToLower("alex42918"):               "Titanium",
-		strings.ToLower("Ancalagor"):               "Titanium",
-		strings.ToLower("bastet222"):               "Titanium",
-		strings.ToLower("call_me_kaye"):            "Titanium",
-		strings.ToLower("chef_mayhem"):             "Titanium",
-		strings.ToLower("definitely_not_him"):      "Titanium",
-		strings.ToLower("duneaught"):               "Titanium",
-		strings.ToLower("firebrde"):                "Titanium",
-		strings.ToLower("flygluffet"):              "Titanium",
-		strings.ToLower("Lucoa"):                   "Titanium",
-		strings.ToLower("Saakas0206"):              "Titanium",
-		strings.ToLower("SailorMint"):              "Titanium",
-		strings.ToLower("seanpwolf"):               "Titanium",
-		strings.ToLower("Uniowen"):                 "Titanium",
-		strings.ToLower("WuffWuff"):                "Titanium",
-		strings.ToLower("yamiramiz"):               "Titanium",
-		strings.ToLower("arborelia"):               "Blood",
-		strings.ToLower("brumekuroi"):              "Blood",
-		strings.ToLower("cohomerlogist"):           "Blood",
-		strings.ToLower("dsmidna"):                 "Blood",
-		strings.ToLower("ekimekim"):                "Blood",
-		strings.ToLower("EpicSuccess"):             "Blood",
-		strings.ToLower("fiverfiverone"):           "Blood",
-		strings.ToLower("Jamblar"):                 "Blood",
-		strings.ToLower("justsparkyyes"):           "Blood",
-		strings.ToLower("Kailaria"):                "Blood",
-		strings.ToLower("Kova46"):                  "Blood",
-		strings.ToLower("Kyakh"):                   "Blood",
-		strings.ToLower("MegaMissingn0"):           "Blood",
-		strings.ToLower("Minhs2"):                  "Blood",
-		strings.ToLower("professionaltwitchtroll"): "Blood",
-		strings.ToLower("rachelsatx"):              "Blood",
-		strings.ToLower("Rotomington"):             "Blood",
-		strings.ToLower("Slimo"):                   "Blood",
-		strings.ToLower("wow_tomato"):              "Blood",
-		strings.ToLower("Zin"):                     "Blood",
-	}
 	w := c.Writer
 	var foundEvent models.Event
 	// Set the header
@@ -199,7 +127,9 @@ func httpEventAPI(c *gin.Context) {
 				TwitchUsername:  participant.TwitchUsername,
 				EventPoints:     participant.EventPoints,
 				EventPlayed:     participant.EventPlayed,
-				TierName:        tiers[strings.ToLower(participant.TwitchUsername)],
+			}
+			if event == "season_7" {
+				part.TierName = s7tiers[strings.ToLower(participant.TwitchUsername)]
 			}
 			parts = append(parts, part)
 		}
