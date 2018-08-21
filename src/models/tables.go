@@ -9,7 +9,8 @@ type Tables struct{}
 
 // FoundTable struct captures all the event tables
 type FoundTable struct {
-	TableName sql.NullString
+	TableName  sql.NullString
+	PrettyName sql.NullString
 }
 
 // GetTables finds all the database names
@@ -17,9 +18,13 @@ func (*Tables) GetTables() ([]FoundTable, error) {
 	var rows *sql.Rows
 	if v, err := db.Query(`
     SELECT
-      DISTINCT(table_schema)
+			DISTINCT(ist.table_schema),
+			nl.league_name
     FROM
-      INFORMATION_SCHEMA.TABLES
+			INFORMATION_SCHEMA.TABLES ist
+		LEFT JOIN
+			necrobot.leagues nl
+				ON nl.schema_name = ist.table_schema
     WHERE
       table_schema not in ('information_schema', 'necrobot' )
     ORDER BY
@@ -37,6 +42,7 @@ func (*Tables) GetTables() ([]FoundTable, error) {
 		var row FoundTable
 		if err := rows.Scan(
 			&row.TableName,
+			&row.PrettyName,
 		); err != nil {
 			return nil, err
 		}
