@@ -10,13 +10,20 @@
               <div class="12u">
                 <a href="/"><img src="/public/images/condor_logo.png" /></a>
               </div>
+              <div class="12u"> 
+                <label class="switch">
+                  <input id="results-switch" class="switch-input" type="checkbox" />
+                  <span class="switch-label" data-on="All Results" data-off="Some Results"></span> 
+                  <span class="switch-handle"></span> 
+                </label>
+              </div>
             </div>
           </header>
         </section>
       </center>
-      <div>&nbsp;</div>
-      <section class="box">
-        <table class="table" id="results-table">
+
+      <section id="section-results" class="box">
+        <table class="table" id="table-results">
           <tr>
             <th class="results blank">&nbsp;</th>
           {{ range $index, $element := .Headers }}
@@ -32,6 +39,23 @@
           {{ end }}
         </table>
       </section>
+      <section id="section-results-all" class="box" hidden >
+        <table class="table" id="table-results-all">
+          <tr>
+            <th class="results blank">&nbsp;</th>
+          {{ range $index, $element := .Headers }}
+              <th class="th-{{ $element }} results"> {{ $element }} </th>
+          {{ end }}
+          </tr>
+          {{ range $index, $element := .ResultsAll }}
+            <tr><td class="td-header header"> {{ $index }}</td>
+            {{ range $key, $value := $element }}
+                <td class="td-{{ $key }} results"> {{ $value }} </td>
+            {{ end }}
+            </tr>
+          {{ end }}
+        </table>
+      </section>      
       <section id="team-list">
         <table id="table-team-list">
           <tr>

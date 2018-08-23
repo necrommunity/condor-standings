@@ -2,14 +2,15 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/sillypears/condor-standings/src/log"
-	"github.com/sillypears/condor-standings/src/models"
 	"io/ioutil"
 	"net/http"
 	"reflect"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sillypears/condor-standings/src/log"
+	"github.com/sillypears/condor-standings/src/models"
 )
 
 // Teams is a var for each team
@@ -93,8 +94,50 @@ func httpTeamResults(c *gin.Context) {
 			"Total":           0,
 		},
 	}
-
+	var teamAll = map[string]map[string]int{
+		"Dark Cookies": map[string]int{
+			"Dark Cookies":    0,
+			"Frozen Cheese":   0,
+			"Italian Carrots": 0,
+			"Regular Ham":     0,
+			"Stinkin' Rebels": 0,
+			"Total":           0,
+		},
+		"Frozen Cheese": map[string]int{
+			"Dark Cookies":    0,
+			"Frozen Cheese":   0,
+			"Italian Carrots": 0,
+			"Regular Ham":     0,
+			"Stinkin' Rebels": 0,
+			"Total":           0,
+		},
+		"Italian Carrots": map[string]int{
+			"Dark Cookies":    0,
+			"Frozen Cheese":   0,
+			"Italian Carrots": 0,
+			"Regular Ham":     0,
+			"Stinkin' Rebels": 0,
+			"Total":           0,
+		},
+		"Regular Ham": map[string]int{
+			"Dark Cookies":    0,
+			"Frozen Cheese":   0,
+			"Italian Carrots": 0,
+			"Regular Ham":     0,
+			"Stinkin' Rebels": 0,
+			"Total":           0,
+		},
+		"Stinkin' Rebels": map[string]int{
+			"Dark Cookies":    0,
+			"Frozen Cheese":   0,
+			"Italian Carrots": 0,
+			"Regular Ham":     0,
+			"Stinkin' Rebels": 0,
+			"Total":           0,
+		},
+	}
 	// Parse through JSON results and fill in team map
+	wins := 0
 	for i := range Results {
 		wi := Results[i].Winner
 		lo := 2
@@ -105,92 +148,38 @@ func httpTeamResults(c *gin.Context) {
 		tLos := "Team" + strconv.Itoa(lo)
 		tWinner := getProp(Results[i], tWin)
 		tLoser := getProp(Results[i], tLos)
-		wins := team[tWinner][tLoser]
-		team[tWinner]["Total"] = team[tWinner]["Total"] + 1
-		team[tWinner][tLoser] = wins + 1
+		wins = team[tWinner][tLoser]
+		if tWinner != tLoser {
+			team[tWinner]["Total"] = team[tWinner]["Total"] + 1
+			team[tWinner][tLoser] = wins + 1
+		}
 	}
-	teamList := map[string][]string{
-		"Dark Cookies": []string{
-			"abu__yazan",
-			"biggiemac42",
-			"chef_mayhem",
-			"Flygluffet",
-			"incnone",
-			"Jamblur",
-			"JustSparkyYes",
-			"Kova46",
-			"Lucoa",
-			"mantasMBL",
-			"Megamissingn0",
-			"Spootybiscuit",
-			"WuffWuff",
-		},
-		"Frozen Cheese": []string{
-			"arborelia",
-			"bastet222",
-			"dsmidna",
-			"duneaught",
-			"firebrde",
-			"Kailaria",
-			"moyuma", 
-			"Slimo",
-			"Squega",
-			"Staekk",
-			"wow_tomato",
-			"yamiramiz",
-		},
-		"Italian Carrots": []string{
-			"ARTQ",
-			"brumekuroi",
-			"Cyber_1",
-			"Minhs2",
-			"mpr",
-			"pancelor",
-			"professionaltwitchtroll",
-			"ratata_ratata",
-			"Rachelsatx",
-			"Revalize",
-			"Siveure",
-			"thedarkfreaaack",
-			"yuka34",
-		},
-		"Regular Hams": []string{
-			"alex42918",
-			"Ancalagor",
-			"Call_Me_Kaye",
-			"definitely_not_HIM",
-			"EpicSuccess",
-			"JackOfGames",
-			"mudjoe2",
-			"Paratroopa1",
-			"ptrevortactyl",
-			"Rotomington",
-			"saakas0206",
-			"seanpwolf",
-			"uniowen",
-		},
-		"Stinkin' Rebels": []string{
-			"ekimekim",
-			"fiverfiverone",
-			"KingTorture",
-			"mayaundefined",
-			"Ratracing",
-			"reijigazpacho",
-			"RoyalGoof",
-			"sailormint",
-			"supervillain_joe",
-			"tetel",
-			"Tufwfo",
-		},
+	wins = 0
+
+	for i := range Results {
+		wi := Results[i].Winner
+		lo := 2
+		if wi == 2 {
+			lo = 1
+		}
+		tWin := "Team" + strconv.Itoa(wi)
+		tLos := "Team" + strconv.Itoa(lo)
+		tWinner := getProp(Results[i], tWin)
+		tLoser := getProp(Results[i], tLos)
+		wins = teamAll[tWinner][tLoser]
+		teamAll[tWinner]["Total"] = teamAll[tWinner]["Total"] + 1
+		teamAll[tWinner][tLoser] = wins + 1
 	}
+
 	headings := []string{"Dark Cookies", "Frozen Cheese", "Italian Carrots", "Regular Ham", "Stinkin' Rebels", "Total"}
 
 	// Send data to template
 	data := TemplateData{
-		Title:    "Team Results",
-		Results:  team,
-		Headers:  headings,
-		TeamList: teamList,
+		Title:      "Team Results",
+		Results:    team,
+		ResultsAll: teamAll,
+		Headers:    headings,
+		TeamList:   teamList,
 	}
 	httpServeTemplate(w, "teamresults", data)
 }

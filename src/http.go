@@ -49,6 +49,7 @@ type TemplateData struct {
 	UserAccounts []models.UserAccount
 	FoundTables  []models.FoundTable
 	Results      map[string]map[string]int
+	ResultsAll   map[string]map[string]int
 	Headers      []string
 	TeamList     map[string][]string
 }
