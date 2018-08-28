@@ -11,6 +11,9 @@ type EventAPI struct{}
 type Participant struct {
 	DiscordUsername string `json:"discordUsername"`
 	TwitchUsername  string `json:"twitchUsername"`
+	RacerID         int    `json:"racerID"`
+	EventWins       int    `json:"eventWins"`
+	EventLosses     int    `json:"eventLosses"`
 	EventPoints     int    `json:"eventPoints"`
 	EventPlayed     int    `json:"eventPlayed"`
 	GroupName       string `json:"groupName"`
@@ -80,6 +83,73 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	return TheEvent, nil
 }
 
+// Why in the world does this take 8 seconds to run D:
+// GetEventInfo gets specific event info
+func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
+	var rows *sql.Rows
+	TheEvent := Event{EventName: eventName, Participants: nil}
+	if v, err := db.Query(`
+		SELECT
+		u.discord_name AS Username,
+		u.twitch_name as tUsername,
+		u.user_id as racerId,
+		(SELECT	COUNT(*)
+			FROM season_7.race_summary rs
+			WHERE rs.winner_id = u.user_id
+		) as wins,
+		(SELECT	COUNT(*)
+			FROM season_7.race_summary rs
+			WHERE rs.loser_id = u.user_id
+		) as losses
+		
+		FROM
+			season_7.entrants e
+				LEFT JOIN
+			necrobot.users u ON u.user_id = e.user_id
+				INNER JOIN
+			season_7.race_summary rsw ON u.user_id = rsw.winner_id
+				INNER JOIN
+			season_7.race_summary rsl ON u.user_id = rsl.loser_id
+				
+			
+		WHERE
+			u.discord_id IS NOT NULL
+			AND u.discord_name IS NOT NULL
+			AND u.twitch_name IS NOT NULL
+			AND u.user_id IS NOT NULL
+		GROUP BY u.user_id
+		ORDER BY wins desc, tUsername asc;
+		`); err == sql.ErrNoRows {
+		return TheEvent, nil
+	} else if err != nil {
+		return TheEvent, err
+	} else {
+		rows = v
+	}
+	defer rows.Close()
+
+	// Find all the users and stick them into the event structure
+	participants := make([]Participant, 0)
+	for rows.Next() {
+		var participant Participant
+		if err := rows.Scan(
+			&participant.DiscordUsername,
+			&participant.TwitchUsername,
+			&participant.RacerID,
+			&participant.EventWins,
+			&participant.EventLosses,
+		); err != nil {
+			return TheEvent, err
+		}
+		participants = append(participants, participant)
+	}
+
+	TheEvent.Participants = participants
+
+	return TheEvent, nil
+}
+
+/*
 // GetEventInfo gets specific event info
 func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	var rows *sql.Rows
@@ -217,72 +287,3 @@ func (*Tables) GetRacersForEvent(eventName string) ([]FoundUserNDWC, int, error)
 	}
 
 }*/
-
-/*
-// Super wrong and slow
-// GetEventInfo gets specific event info
-func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
-	var rows *sql.Rows
-	TheEvent := Event{EventName: eventName, Participants: nil}
-	if v, err := db.Query(`
-		SELECT
-		    u.discord_name AS Username,
-			u.twitch_name as tUsername,
-			u.user_id as racerId
-		FROM
-		    ` + eventName + `.entrants e
-		        LEFT JOIN
-		    necrobot.users u ON u.user_id = e.user_id
-		WHERE
-			u.discord_id IS NOT NULL
-			AND u.discord_name IS NOT NULL
-			AND u.twitch_name IS NOT NULL
-			AND u.user_id IS NOT NULL
-		GROUP BY u.discord_name
-		`); err == sql.ErrNoRows {
-		return TheEvent, nil
-	} else if err != nil {
-		return TheEvent, err
-	} else {
-		rows = v
-	}
-	defer rows.Close()
-
-	// Find all the users and stick them into the event structure
-	participants := make([]Participant, 0)
-	for rows.Next() {
-		var participant Participant
-		if err := rows.Scan(
-			&participant.DiscordUsername,
-			&participant.TwitchUsername,
-			&participant.RacerID,
-		); err != nil {
-			return TheEvent, err
-		}
-
-		if err := db.QueryRow(`
-		SELECT COUNT(winner_id) AS wins
-		FROM `+eventName+`.race_summary
-		WHERE winner_id = ?
-		LIMIT 1
-		`, participant.RacerID).Scan(&participant.EventWins); err != nil {
-			return TheEvent, err
-		}
-
-		if err := db.QueryRow(`
-		SELECT COUNT(loser_id) AS losses
-		FROM `+eventName+`.race_summary
-		WHERE loser_id = ?
-		LIMIT 1
-		`, participant.RacerID).Scan(&participant.EventLosses); err != nil {
-			return TheEvent, nil
-		}
-
-		participants = append(participants, participant)
-	}
-
-	TheEvent.Participants = participants
-
-	return TheEvent, nil
-}
-*/

@@ -125,6 +125,8 @@ func httpEventAPI(c *gin.Context) {
 			part := models.Participant{
 				DiscordUsername: participant.DiscordUsername,
 				TwitchUsername:  participant.TwitchUsername,
+				EventWins:       participant.EventWins,
+				EventLosses:     participant.EventLosses,
 				EventPoints:     participant.EventPoints,
 				EventPlayed:     participant.EventPlayed,
 			}

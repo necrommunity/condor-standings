@@ -26,7 +26,7 @@ function changeEvent(eventName) {
     var thereIsAGroup = false;
     var thereIsATier = false;
     for (var key in data.Participants) {
-      tabledata = tabledata + '<tr><td><a href="https://www.twitch.tv/' + data.Participants[key]['twitchUsername'] + '" target="_blank" >' + data.Participants[key]['twitchUsername'] + '</td><td>' + data.Participants[key]['eventPoints'] + '</td><td>' + data.Participants[key]['eventPlayed'] + '</td>';
+      tabledata = tabledata + '<tr><td><a href="https://www.twitch.tv/' + data.Participants[key]['twitchUsername'] + '" target="_blank" >' + data.Participants[key]['twitchUsername'] + '</td><td>' + data.Participants[key]['eventWins'] + '</td><td>' + data.Participants[key]['eventLosses'] + '</td>';
       if (data.Participants[key]['groupName']) {
         tabledata = tabledata + '<td>' + data.Participants[key]['groupName'] + '</td>';
         thereIsAGroup = true;
@@ -37,11 +37,11 @@ function changeEvent(eventName) {
       tabledata = tabledata + '</tr>';
     }
     if (thereIsAGroup) {
-      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Points</th><th>Played</th><th>Group</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Wins</th><th>Losses</th><th>Group</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
     } else if (thereIsATier) {
-      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Points</th><th>Played</th><th>Tier</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Wins</th><th>Losses</th><th>Tier</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
     } else {
-      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Points</th><th>Played</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
+      $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Wins</th><th>Losses</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
     }
   });
 }
