@@ -33,26 +33,28 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	if v, err := db.Query(`
 		SELECT
 			u.discord_name AS Username,
-			u.twitch_name AS tUsername,
-			SUM(CASE
-				WHEN rr.rank = 1 THEN 1
-			ELSE 0
-			END) AS Points,
-			COUNT(rr.user_id) AS Played,
+			u.twitch_name as tUsername,
+			u.user_id as racerId,
+			(SELECT	COUNT(rs.winner_id)
+				FROM ` + eventName + `.race_summary rs
+				WHERE rs.winner_id = u.user_id
+			) as wins,
+			(SELECT	COUNT(rs.winner_id)
+				FROM ` + eventName + `.race_summary rs
+				WHERE rs.loser_id = u.user_id
+			) as losses,
 			e.group
 		FROM
 			` + eventName + `.entrants e
-			LEFT JOIN
-				necrobot.users u ON u.user_id = e.user_id
-			LEFT JOIN
-				` + eventName + `.race_runs rr ON rr.user_id = e.user_id
+				LEFT JOIN
+			necrobot.users u ON u.user_id = e.user_id
 		WHERE
 			u.discord_id IS NOT NULL
 			AND u.discord_name IS NOT NULL
 			AND u.twitch_name IS NOT NULL
-			AND e.group IS NOT NULL
-		GROUP BY u.discord_name , e.group
-		ORDER BY e.group DESC , Points DESC , Played DESC , Username ASC
+			AND u.user_id IS NOT NULL
+		GROUP BY u.user_id
+		ORDER BY e.group, wins desc, tUsername asc;
 		`); err == sql.ErrNoRows {
 		return TheEvent, nil
 	} else if err != nil {
@@ -66,11 +68,13 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	participants := make([]Participant, 0)
 	for rows.Next() {
 		var participant Participant
+
 		if err := rows.Scan(
 			&participant.DiscordUsername,
 			&participant.TwitchUsername,
-			&participant.EventPoints,
-			&participant.EventPlayed,
+			&participant.RacerID,
+			&participant.EventWins,
+			&participant.EventLosses,
 			&participant.GroupName,
 		); err != nil {
 			return TheEvent, err
@@ -94,24 +98,18 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 		u.twitch_name as tUsername,
 		u.user_id as racerId,
 		(SELECT	COUNT(*)
-			FROM season_7.race_summary rs
+			FROM ` + eventName + `.race_summary rs
 			WHERE rs.winner_id = u.user_id
 		) as wins,
 		(SELECT	COUNT(*)
-			FROM season_7.race_summary rs
+			FROM ` + eventName + `.race_summary rs
 			WHERE rs.loser_id = u.user_id
 		) as losses
 		
 		FROM
-			season_7.entrants e
+			` + eventName + `.entrants e
 				LEFT JOIN
 			necrobot.users u ON u.user_id = e.user_id
-				INNER JOIN
-			season_7.race_summary rsw ON u.user_id = rsw.winner_id
-				INNER JOIN
-			season_7.race_summary rsl ON u.user_id = rsl.loser_id
-				
-			
 		WHERE
 			u.discord_id IS NOT NULL
 			AND u.discord_name IS NOT NULL
