@@ -3,8 +3,9 @@ package models
 import (
 	"database/sql"
 	"errors"
-	_ "github.com/go-sql-driver/mysql"
 	"os"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -14,6 +15,10 @@ var (
 //-----------
 // Data types
 //-----------
+type ReturnedTable struct {
+	EventName  string `json:"eventName"`
+	PrettyName string `json:"prettyName"`
+}
 
 // Models for each property represents a database table
 type Models struct {

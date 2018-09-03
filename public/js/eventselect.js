@@ -19,7 +19,7 @@ $(function($) {
   
   
 
-function changeEvent(eventName) {
+function changeEvent(eventName, prettyName) {
   $.get("api/event/"+eventName, function(data, status){
     //$('#eventName').html('<h2>'+ data.eventName.trim() +'</h2>');
     var tabledata = "";
@@ -44,8 +44,9 @@ function changeEvent(eventName) {
       $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Wins</th><th>Losses</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
     }
   });
+  $(document).prop('title', 'Home - ' + prettyName);
 }
 
 $( window ).on( "load", function() {
-  changeEvent($("#eventSelector")[0][1].value); 
+  changeEvent($("#eventSelector")[0][1].value, $("#eventSelector")[0][1].text); 
 });

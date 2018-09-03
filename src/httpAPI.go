@@ -19,9 +19,6 @@ var (
 )
 
 // ReturnedTables creates a struct for json output
-type ReturnedTables struct {
-	EventNames []string `json:"eventNames"`
-}
 
 func httpAPI(c *gin.Context) {
 	// Local variables
@@ -50,7 +47,7 @@ func httpEventDocAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
 
-	returnedTables := make([]string, 0)
+	returnedTables := make([]models.ReturnedTable, 0)
 
 	foundTables, err := db.Tables.GetTables()
 	if err != nil {
@@ -58,14 +55,18 @@ func httpEventDocAPI(c *gin.Context) {
 	}
 
 	for _, tname := range foundTables {
-		returnedTables = append(returnedTables, tname.TableName.String)
+		var rTable models.ReturnedTable
+		rTable.EventName = tname.TableName.String
+		if tname.PrettyName.Valid {
+			rTable.PrettyName = tname.PrettyName.String
+		} else {
+			rTable.PrettyName = tname.TableName.String
+		}
+		returnedTables = append(returnedTables, rTable)
 	}
 
-	var TablesReturned ReturnedTables
-	TablesReturned.EventNames = returnedTables
-
 	w.Header().Set("Content-Type", "application/json")
-	jsonData, err := json.MarshalIndent(TablesReturned, "", "\t")
+	jsonData, err := json.MarshalIndent(returnedTables, "", "\t")
 	if err != nil {
 		log.Error("Couldn't generate JSON")
 		//w.Write([]byte("Please search for a user"))

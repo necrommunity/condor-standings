@@ -1,8 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
+	"github.com/sillypears/condor-standings/src/models"
 )
 
 //  --------------------------------
@@ -13,21 +19,34 @@ func httpHome(c *gin.Context) {
 	// Local variables
 	w := c.Writer
 
-	users, usersTotal, err := db.Users.GetUsers()
+	url := "https://wow.freepizza.how/api/event"
+	urlClient := http.Client{
+		Timeout: time.Second * 2,
+	}
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Error("Could not get users: ", err)
+		log.Error(err)
+	}
+	req.Header.Set("User-Agent", "it's me!")
+	res, getErr := urlClient.Do(req)
+	if getErr != nil {
+		log.Error(getErr)
+	}
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		log.Error(readErr)
 	}
 
-	foundTables, err := db.Tables.GetTables()
-	if err != nil {
-		log.Error("Could not get tables: ", err)
+	// Build the results struct
+	var EventTables []models.ReturnedTable
+	jsonErr := json.Unmarshal(body, &EventTables)
+	if jsonErr != nil {
+		log.Error(jsonErr)
 	}
 
 	data := TemplateData{
-		Title:        "Home",
-		UserAccounts: users,
-		UsersTotal:   usersTotal,
-		FoundTables:  foundTables,
+		Title:       "Home",
+		FoundTables: EventTables,
 	}
 	httpServeTemplate(w, "home", data)
 }
