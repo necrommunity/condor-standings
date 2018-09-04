@@ -8,28 +8,40 @@
 <html>
   <head>
     <title>{{ .Title }}</title>
+    
+    <!-- Meta related meta things -->
     <meta charset="utf-8" />
-    
     <meta name="viewport" content="width=device-width, initial-scale=1" >
-    
-    <meta name="description" content="A silly project for silly people" >
-    
-    <meta itemprop="name" content="CoNDOR Stats and Things" >
-    <meta itemprop="description" content="A silly project for silly people" >
-    <meta itemprop="image" content="https://wow.freepizza.how/public/images/condor_crow.png" >
     <meta itemprop="keywords" content="crypt, necrodancer, condor, racing, online, amplified, twitch" >
     
-    <meta property="og:url" content="https://wow.freepizza.how" >
-    <meta property="og:type" content="website" >
-    <meta property="og:title" content="CoNDOR Stats and Things" >
-    <meta property="og:description" content="A silly project for silly people" >
-    <meta property="og:image" content="https://wow.freepizza.how/public/images/condor_crow.png" >
-
-    <meta name="twitter:card" content="summary_small_image" >
-    <meta name="twitter:title" content="CoNDOR Stats and Things" >
+    <!-- Description related things -->
+    {{ if eq .Title "Home" }}
+    <meta name="description" content="The latest CoNDOR event is {{(index .FoundTables 0).PrettyName }} " >
+    <meta itemprop="description" content="The latest CoNDOR event is {{(index .FoundTables 0).PrettyName }} " >
+    <meta property="og:description" content="The latest CoNDOR event is {{(index .FoundTables 0).PrettyName }} " >    
+    <meta name="twitter:description" content="The latest CoNDOR event is {{(index .FoundTables 0).PrettyName }} " >
+    {{ else }}
+    <meta name="description" content="A silly project for silly people" >
+    <meta itemprop="description" content="A silly project for silly people" >
+    <meta property="og:description" content="A silly project for silly people" >    
     <meta name="twitter:description" content="A silly project for silly people" >
+    {{ end }}
+
+    <!-- Name related things -->
+    <meta itemprop="name" content="CoNDOR Stats and Things" >
+    <meta property="og:title" content="CoNDOR Stats and Things" >
+    <meta name="twitter:title" content="CoNDOR Stats and Things" >
+    
+    <!-- image related things -->
+    <meta itemprop="image" content="https://wow.freepizza.how/public/images/condor_crow.png" >
+    <meta property="og:image" content="https://wow.freepizza.how/public/images/condor_crow.png" >
     <meta name="twitter:image" content="https://wow.freepizza.how/public/images/condor_crow.png" >
     <meta link rel="shortcut icon" href="https://wow.freepizza.how/public/images/condor_crow.png" type="image/png" >
+    <meta name="twitter:card" content="summary_small_image" >
+
+    <!-- Website related things -->
+    <meta property="og:url" content="https://wow.freepizza.how" >
+    <meta property="og:type" content="website" >    
     
     <!-- Thanks to https://heymeta.com -->
 
