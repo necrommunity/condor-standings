@@ -54,7 +54,7 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 			AND u.twitch_name IS NOT NULL
 			AND u.user_id IS NOT NULL
 		GROUP BY u.user_id
-		ORDER BY e.group, wins desc, tUsername asc;
+		ORDER BY e.group, wins desc, losses asc, tUsername asc;
 		`); err == sql.ErrNoRows {
 		return TheEvent, nil
 	} else if err != nil {
@@ -116,7 +116,7 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 			AND u.twitch_name IS NOT NULL
 			AND u.user_id IS NOT NULL
 		GROUP BY u.user_id
-		ORDER BY wins desc, tUsername asc;
+		ORDER BY wins desc, losses asc, tUsername asc;
 		`); err == sql.ErrNoRows {
 		return TheEvent, nil
 	} else if err != nil {
