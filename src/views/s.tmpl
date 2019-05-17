@@ -1,0 +1,88 @@
+{{ define "content" }}
+
+<!-- Main -->
+<div id="main" class="wrapper style1">
+   <div class="container">
+      <!-- Content -->
+      <center>
+        <section id="upper">
+          <header class="">
+            <div class="row">
+              <div class="12u">
+                <img src="/public/images/condor_logo.png" />
+              </div>
+            </div>
+          </header>
+        </section>
+      </center>
+      <p>
+      </p>
+      <section id="s" class="box">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="results">
+                S Wins
+              </th>
+              <th class="results">
+              Non-S Wins
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="results">
+                {{ .AllSWins }}
+              </td>
+              <td class="results">
+                {{ .AllNonSWins }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section id="participants" class="box">
+        <div class="row">
+          <div class="6u 12u">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="results">
+                    All The S's ({{ len .AllSParts }} racers)
+                </tr>
+              </thead>
+              <tbody>
+                {{ range $index, $element := .AllSParts }}
+                  <tr>
+                    <td class="results">
+                      {{ $element.TwitchUsername }}
+                    </td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+            </div>
+            <div class="6u 12u">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="results">
+                    Everyone Else :) ({{ len .AllNonSParts }} racers) 
+                </tr>
+              </thead>
+              <tbody>
+                {{ range $index, $element := .AllNonSParts }}
+                  <tr>
+                    <td class="results">
+                      {{ $element.TwitchUsername }}
+                    </td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+{{ end }}

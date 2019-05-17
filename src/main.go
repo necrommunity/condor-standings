@@ -1,7 +1,7 @@
 // @APIVersion 1.0.0
 // @Title My Cool API
 // @Description My API usually works as expected. But sometimes its not true
-// @BasePath http://wow.freepizza.how/
+// @BasePath http://some.pizza/
 // @Contact sillypairs@gmail.com
 // @TermsOfServiceUrl http://google.com/
 // @License BSD

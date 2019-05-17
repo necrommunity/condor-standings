@@ -26,7 +26,7 @@ func httpTeamResults(c *gin.Context) {
 	w := c.Writer
 
 	// Used to get JSON results
-	url := "https://wow.freepizza.how/api/teamresults"
+	url := "https://some.pizza/api/teamresults"
 	urlClient := http.Client{
 		Timeout: time.Second * 2,
 	}

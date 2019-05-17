@@ -18,7 +18,13 @@ var (
 	apiurl        = flag.String("api", "http://127.0.0.1", "The base path URI of the API service")
 )
 
-// ReturnedTables creates a struct for json output
+// @Title API
+// @Description Lists all APIs
+// @Accept plain
+// @Produce json
+// @Success 200 {object} json
+// @Failure 404 {object} APIError "No Events Found"
+// @Router /api [get]
 
 func httpAPI(c *gin.Context) {
 	// Local variables
@@ -40,7 +46,7 @@ func httpAPI(c *gin.Context) {
 // @Description Lists all events found by name
 // @Accept plain
 // @Produce json
-// @Success 200 {object} ReturnedTables
+// @Success 200 {object} models.ReturnedTable
 // @Failure 404 {object} APIError "No Events Found"
 // @Router /api/event [get]
 func httpEventDocAPI(c *gin.Context) {
@@ -81,7 +87,7 @@ func httpEventDocAPI(c *gin.Context) {
 // @Accept plain
 // @Produce json
 // @Param event	path	string	true	"Event Name"
-// @Success 200 {object} Event
+// @Success 200 {object} models.Event
 // @Failure 404 {object} APIError "Event not found"
 // @Router /api/event/{event} [get]
 // httpEventAPI gets listings for the events
@@ -173,5 +179,68 @@ func httpTeamAPI(c *gin.Context) {
 		log.Error("Couldn't parse results: ", err)
 		return
 	}
+	w.Write(jsonData)
+}
+
+// @Title S Results Listing
+// @Description Lists all racers from season 8 specifically
+// @Accept plain
+// @Produce json
+// @Param event	path	string	true	"Event Name"
+// @Success 200 {object} models.Event
+// @Failure 404 {object} APIError "Nothing found"
+// @Router /api/s [get]
+// httpSAPI gets the s8 results for manipulating
+func httpSAPI(c *gin.Context) {
+	// Local variables
+
+	w := c.Writer
+	var foundEvent models.Event
+	// Set the header
+	w.Header().Set("Content-Type", "application/json")
+
+	// Strictly for season 8
+	event := "season_8"
+
+	foundEvent, err := db.EventAPI.GetEventInfo(event)
+
+	if err != nil {
+		log.Error("Couldn't get event info: ", err)
+	}
+
+	season, err := regexp.MatchString("season_*", event)
+	if err != nil {
+		log.Error("Regex is bad")
+	}
+
+	editedEvent := models.Event{
+		EventName: foundEvent.EventName,
+	}
+	var parts []models.Participant
+
+	if season == true {
+		for _, participant := range foundEvent.Participants {
+			part := models.Participant{
+				DiscordUsername: participant.DiscordUsername,
+				TwitchUsername:  participant.TwitchUsername,
+				EventWins:       participant.EventWins,
+				EventLosses:     participant.EventLosses,
+				EventPoints:     participant.EventPoints,
+				EventPlayed:     participant.EventPlayed,
+			}
+
+			parts = append(parts, part)
+		}
+		editedEvent.Participants = parts
+		foundEvent = editedEvent
+	}
+
+	jsonData, err := json.MarshalIndent(foundEvent, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		//w.Write([]byte("Please search for a user"))
+		return
+	}
+
 	w.Write(jsonData)
 }

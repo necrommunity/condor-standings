@@ -20,6 +20,7 @@ import (
 
 const (
 	sessionName = "condor.sid"
+        ipAddress = "207.246.84.55"
 )
 
 var (
@@ -44,12 +45,18 @@ type Event struct {
 }
 
 type TemplateData struct {
-	Title       string
-	FoundTables []models.ReturnedTable
-	Results     map[string]map[string]int
-	ResultsAll  map[string]map[string]int
-	Headers     []string
-	TeamList    map[string][]string
+	Title       	string
+	FoundTables 	[]models.ReturnedTable
+	Results     	map[string]map[string]int
+	ResultsAll  	map[string]map[string]int
+	Headers     	[]string
+	TeamList    	map[string][]string
+	SEvent			models.Event
+	AllSWins		int
+	AllNonSWins		int
+	AllSParts		[]models.Participant
+	AllNonSParts	[]models.Participant
+
 }
 
 //  -----------------------
@@ -121,10 +128,12 @@ func httpInit() {
 	// Path handlers (for the website)
 	httpRouter.GET("/", httpHome)
 	httpRouter.GET("/teamresults", httpTeamResults)
+	httpRouter.GET("/s", httpS)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
 	httpRouter.GET("/api/teamresults", httpTeamAPI)
+	httpRouter.GET("/api/s", httpSAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 
@@ -143,7 +152,7 @@ func httpInit() {
 
 		// ListenAndServe is blocking, so start listening on a new goroutine
 		go func() {
-			http.ListenAndServe(":80", HTTPServeMux) // Nothing before the colon implies 0.0.0.0
+			http.ListenAndServe(ipAddress+":80", HTTPServeMux) // Nothing before the colon implies 0.0.0.0
 			log.Fatal("http.ListenAndServe ended for port 80.", nil)
 		}()
 
@@ -156,9 +165,10 @@ func httpInit() {
 
 	// Start listening and serving requests (which is blocking)
 	log.Info("Listening on port " + strconv.Itoa(port) + ".")
+       
 	if useTLS {
 		if err := http.ListenAndServeTLS(
-			":"+strconv.Itoa(port), // Nothing before the colon implies 0.0.0.0
+			ipAddress+":"+strconv.Itoa(port), // Nothing before the colon implies 0.0.0.0
 			tlsCertFile,
 			tlsKeyFile,
 			httpRouter,
@@ -169,7 +179,7 @@ func httpInit() {
 	} else {
 		// Listen and serve (HTTP)
 		if err := http.ListenAndServe(
-			":"+strconv.Itoa(port), // Nothing before the colon implies 0.0.0.0
+			ipAddress+":"+strconv.Itoa(port), // Nothing before the colon implies 0.0.0.0
 			httpRouter,
 		); err != nil {
 			log.Fatal("http.ListenAndServe failed:", err)

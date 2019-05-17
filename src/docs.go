@@ -1,11 +1,11 @@
-package main
 
+package main
 //This file is generated automatically. Do not try to edit it manually.
 
 var resourceListingJson = `{
     "apiVersion": "1.0.0",
     "swaggerVersion": "1.2",
-    "basePath": "http://wow.freepizza.how/",
+    "basePath": "http://some.pizza/",
     "apis": [
         {
             "path": "/api",
@@ -19,20 +19,14 @@ var resourceListingJson = `{
         "licenseUrl": "http://opensource.org/licenses/BSD-2-Clause"
     }
 }`
-var apiDescriptionsJson = `{
+var apiDescriptionsJson = map[string]string{"api":`{
     "apiVersion": "1.0.0",
     "swaggerVersion": "1.2",
-    "basePath": "http://wow.freepizza.how/",
+    "basePath": "http://some.pizza/",
     "resourcePath": "/api",
     "produces": [
         "application/json"
     ],
-    "info": {
-        "contact": "sillypairs@gmail.com",
-        "termsOfServiceUrl": "http://google.com/",
-        "license": "BSD",
-        "licenseUrl": "http://opensource.org/licenses/BSD-2-Clause"
-    },
     "apis": [
         {
             "path": "/api/event",
@@ -41,7 +35,7 @@ var apiDescriptionsJson = `{
                 {
                     "httpMethod": "GET",
                     "nickname": "Events",
-                    "type": "github.com.sillypears.condor-standings.src.ReturnedTables",
+                    "type": "github.com.sillypears.condor-standings.src.models.ReturnedTable",
                     "items": {},
                     "summary": "Lists all events found by name",
                     "responseMessages": [
@@ -49,7 +43,7 @@ var apiDescriptionsJson = `{
                             "code": 200,
                             "message": "",
                             "responseType": "object",
-                            "responseModel": "github.com.sillypears.condor-standings.src.ReturnedTables"
+                            "responseModel": "github.com.sillypears.condor-standings.src.models.ReturnedTable"
                         },
                         {
                             "code": 404,
@@ -71,7 +65,7 @@ var apiDescriptionsJson = `{
                 {
                     "httpMethod": "GET",
                     "nickname": "Event Listing",
-                    "type": "github.com.sillypears.condor-standings.src.Event",
+                    "type": "github.com.sillypears.condor-standings.src.models.Event",
                     "items": {},
                     "summary": "Lists everything found for the event",
                     "parameters": [
@@ -93,7 +87,7 @@ var apiDescriptionsJson = `{
                             "code": 200,
                             "message": "",
                             "responseType": "object",
-                            "responseModel": "github.com.sillypears.condor-standings.src.Event"
+                            "responseModel": "github.com.sillypears.condor-standings.src.models.Event"
                         },
                         {
                             "code": 404,
@@ -137,6 +131,50 @@ var apiDescriptionsJson = `{
                     ]
                 }
             ]
+        },
+        {
+            "path": "/api/s",
+            "description": "Lists all racers from season 8 specifically",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "S Results Listing",
+                    "type": "github.com.sillypears.condor-standings.src.models.Event",
+                    "items": {},
+                    "summary": "Lists all racers from season 8 specifically",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "event",
+                            "description": "Event Name",
+                            "dataType": "string",
+                            "type": "string",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ],
+                    "responseMessages": [
+                        {
+                            "code": 200,
+                            "message": "",
+                            "responseType": "object",
+                            "responseModel": "github.com.sillypears.condor-standings.src.models.Event"
+                        },
+                        {
+                            "code": 404,
+                            "message": "Nothing found",
+                            "responseType": "object",
+                            "responseModel": "github.com.sillypears.condor-standings.src.APIError"
+                        }
+                    ],
+                    "produces": [
+                        "application/json"
+                    ]
+                }
+            ]
         }
     ],
     "models": {
@@ -157,8 +195,8 @@ var apiDescriptionsJson = `{
                 }
             }
         },
-        "github.com.sillypears.condor-standings.src.Event": {
-            "id": "github.com.sillypears.condor-standings.src.Event",
+        "github.com.sillypears.condor-standings.src.models.Event": {
+            "id": "github.com.sillypears.condor-standings.src.models.Event",
             "properties": {
                 "Participants": {
                     "type": "array",
@@ -176,24 +214,17 @@ var apiDescriptionsJson = `{
                 }
             }
         },
-        "github.com.sillypears.condor-standings.src.ReturnedTables": {
-            "id": "github.com.sillypears.condor-standings.src.ReturnedTables",
-            "properties": {
-                "eventNames": {
-                    "type": "array",
-                    "description": "",
-                    "items": {
-                        "type": "string"
-                    },
-                    "format": ""
-                }
-            }
-        },
         "github.com.sillypears.condor-standings.src.models.Participant": {
             "id": "github.com.sillypears.condor-standings.src.models.Participant",
             "properties": {
                 "discordUsername": {
                     "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "eventLosses": {
+                    "type": "int",
                     "description": "",
                     "items": {},
                     "format": ""
@@ -210,8 +241,20 @@ var apiDescriptionsJson = `{
                     "items": {},
                     "format": ""
                 },
+                "eventWins": {
+                    "type": "int",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
                 "groupName": {
                     "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "racerID": {
+                    "type": "int",
                     "description": "",
                     "items": {},
                     "format": ""
@@ -264,6 +307,23 @@ var apiDescriptionsJson = `{
                     "format": ""
                 }
             }
+        },
+        "github.com.sillypears.condor-standings.src.models.ReturnedTable": {
+            "id": "github.com.sillypears.condor-standings.src.models.ReturnedTable",
+            "properties": {
+                "eventName": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "prettyName": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                }
+            }
         }
     }
-}`
+}`,}

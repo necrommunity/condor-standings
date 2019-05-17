@@ -49,5 +49,5 @@
    * `echo -e "<VirtualHost *:80>\nServerAdmin admin@test.com\nDocumentRoot "/usr/share/httpd"\nServerName test.com\nServerAlias www.test.com\n</VirtualHost>" > /etc/httpd/conf.d/test.conf`
    * `systemctl start httpd`
    * `certbot certonly --apache -d <domain-name.com> -d <another.domain-name.com> --email <your@email.address> --agree-tos`
-   * TLS_CERT_FILE = `/etc/letsencrypt/live/wow.freepizza.how/fullchain.pem` 
-   * TLS_KEY_FILE = `/etc/letsencrypt/live/wow.freepizza.how/privkey.pem`
+   * TLS_CERT_FILE = `/etc/letsencrypt/live/some.pizza/fullchain.pem` 
+   * TLS_KEY_FILE = `/etc/letsencrypt/live/some.pizza/privkey.pem`

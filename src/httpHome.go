@@ -19,7 +19,7 @@ func httpHome(c *gin.Context) {
 	// Local variables
 	w := c.Writer
 
-	url := "https://wow.freepizza.how/api/event"
+	url := "https://some.pizza/api/event"
 	urlClient := http.Client{
 		Timeout: time.Second * 2,
 	}

@@ -14,7 +14,7 @@ Table of Contents
 |-----|-----|
 | Resource Path | /api |
 | API Version | 1.0.0 |
-| BasePath for the API | http://wow.freepizza.how/ |
+| BasePath for the API | http://some.pizza/ |
 | Consumes | text/plain |
 | Produces | application/json |
 
@@ -28,6 +28,7 @@ Table of Contents
 | /api/event | [GET](#Events) | Lists all events found by name |
 | /api/event/\{event\} | [GET](#Event Listing) | Lists everything found for the event |
 | /api/teamresults | [GET](#Team Results Listing) | Lists everything found for the season 7 teams |
+| /api/s | [GET](#S Results Listing) | Lists all racers from season 8 specifically |
 
 
 
@@ -42,7 +43,6 @@ Lists all events found by name
 
 | Code | Type | Model | Message |
 |-----|-----|-----|-----|
-| 200 | object | [ReturnedTables](#github.com.sillypears.condor-standings.src..ReturnedTables) |  |
 | 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | No Events Found |
 
 
@@ -81,6 +81,25 @@ Lists everything found for the season 7 teams
 | 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | Nothing found |
 
 
+<a name="S Results Listing"></a>
+
+#### API: /api/s (GET)
+
+
+Lists all racers from season 8 specifically
+
+
+
+| Param Name | Param Type | Data Type | Description | Required? |
+|-----|-----|-----|-----|-----|
+| event | path | string | Event Name | Yes |
+
+
+| Code | Type | Model | Message |
+|-----|-----|-----|-----|
+| 404 | object | [APIError](#github.com.sillypears.condor-standings.src..APIError) | Nothing found |
+
+
 
 
 ### Models
@@ -103,14 +122,6 @@ Lists everything found for the season 7 teams
 | Participants | array |  |
 | eventName | string |  |
 
-<a name="github.com.sillypears.condor-standings.src..ReturnedTables"></a>
-
-#### ReturnedTables
-
-| Field Name (alphabetical) | Field Type | Description |
-|-----|-----|-----|
-| eventNames | array |  |
-
 <a name="github.com.sillypears.condor-standings.src.models.Participant"></a>
 
 #### Participant
@@ -118,9 +129,12 @@ Lists everything found for the season 7 teams
 | Field Name (alphabetical) | Field Type | Description |
 |-----|-----|-----|
 | discordUsername | string |  |
+| eventLosses | int |  |
 | eventPlayed | int |  |
 | eventPoints | int |  |
+| eventWins | int |  |
 | groupName | string |  |
+| racerID | int |  |
 | tierName | string |  |
 | twitchUsername | string |  |
 
