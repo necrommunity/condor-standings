@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"strings"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
@@ -60,14 +61,19 @@ func httpS(c *gin.Context) {
 			nonSParticipants = append(nonSParticipants, parts)
 		}
 	}
-
+	totalWins := sWins + nonSWins
+	sWinsPerc := fmt.Sprintf("%.2f", (float64(sWins) / float64(totalWins) * 100))
+	nonSWinsPerc := fmt.Sprintf("%.2f", (float64(nonSWins) / float64(totalWins) * 100))
+	log.Info(totalWins, sWinsPerc)
 	data := TemplateData{
-		Title: 			"Season 8 ESSSSSSS",
-		SEvent: 		ReturnedEvent,
-		AllSWins: 		sWins,
-		AllNonSWins: 	nonSWins,
-		AllSParts:		sParticipants,
-		AllNonSParts:	nonSParticipants,
+		Title: 			 "Season 8 ESSSSSSS",
+		SEvent: 		 ReturnedEvent,
+		AllSWins: 		 sWins,
+		AllSWinsPerc:	 sWinsPerc,
+		AllNonSWins: 	 nonSWins,
+		AllNonSWinsPerc: nonSWinsPerc,
+		AllSParts:		 sParticipants,
+		AllNonSParts:	 nonSParticipants,
 	}
 	httpServeTemplate(w, "s", data)
 }

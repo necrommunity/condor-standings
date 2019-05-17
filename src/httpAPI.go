@@ -32,7 +32,8 @@ func httpAPI(c *gin.Context) {
 	w := c.Writer
 
 	w.Header().Set("Content-Type", "application/json")
-	jsonData, err := json.Marshal(json.RawMessage(apiDescriptionsJson))
+	jsonData, err := json.Marshal(apiDescriptionsJson)
+	
 	if err != nil {
 		log.Error("Couldn't generate JSON")
 		return

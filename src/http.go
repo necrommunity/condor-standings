@@ -54,6 +54,8 @@ type TemplateData struct {
 	SEvent			models.Event
 	AllSWins		int
 	AllNonSWins		int
+	AllSWinsPerc	string
+	AllNonSWinsPerc	string
 	AllSParts		[]models.Participant
 	AllNonSParts	[]models.Participant
 

@@ -326,4 +326,5 @@ var apiDescriptionsJson = map[string]string{"api":`{
             }
         }
     }
-}`,}
+}`,
+}
