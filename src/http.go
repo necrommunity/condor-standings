@@ -58,7 +58,20 @@ type TemplateData struct {
 	AllNonSWinsPerc	string
 	AllSParts		[]models.Participant
 	AllNonSParts	[]models.Participant
-
+	AutoGens	    []models.Sweep
+	AutoGensLen     int
+	AutoGensSweepLen int
+	AGPerc          string
+	TotalAG         int
+	Challenges      []models.Sweep
+	ChallengesLen   int
+	ChalSweepLen    int
+	CPerc           string
+	TotalC          int
+	TotalMatches    int
+	TotalSweeps     int
+	AGSweepsPerc    string
+	CSweepsPerc     string
 }
 
 //  -----------------------
@@ -131,11 +144,13 @@ func httpInit() {
 	httpRouter.GET("/", httpHome)
 	httpRouter.GET("/teamresults", httpTeamResults)
 	httpRouter.GET("/s", httpS)
+	httpRouter.GET("/sweeps", httpSweeps)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
 	httpRouter.GET("/api/teamresults", httpTeamAPI)
 	httpRouter.GET("/api/s", httpSAPI)
+	httpRouter.GET("/api/sweeps", httpSweepsAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 

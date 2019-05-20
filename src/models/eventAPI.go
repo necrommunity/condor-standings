@@ -1,7 +1,10 @@
 package models
 
 import (
+	
 	"database/sql"
+	"time"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // EventAPI struct captures all users found
@@ -24,6 +27,19 @@ type Participant struct {
 type Event struct {
 	EventName    string `json:"eventName"`
 	Participants []Participant
+}
+
+type Sweep struct {
+	MatchID	    int    `json:"match_id"`
+	Racer1	    string `json:"racer1"`
+	Racer2 	    string `json:"racer2"`
+	StartTime	time.Time    `json:"startTime"`
+	Cawmentator sql.NullString `json:"cawmentator"`
+	VODLink	    sql.NullString `json:"vodLink"`
+	AutoGenned	[]byte   `json:"autogenned"`
+	AutoGen     bool	`json:"autoGen"`
+	Racer1Wins	int	   `json:"racer1Wins"`
+	Racer2Wins	int	   `json:"racer2Wins"`
 }
 
 // GetEventInfoGroups gets all needed information about a specific event
@@ -145,6 +161,57 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	TheEvent.Participants = participants
 
 	return TheEvent, nil
+}
+
+// Why in the world does this take 8 seconds to run D:
+// GetEventInfo gets specific event info
+func (*EventAPI) GetSweepsInfo() ([]Sweep, error) {
+	var rows *sql.Rows
+	var sweepsInfo []Sweep
+	if v, err := db.Query(`
+		SELECT 
+		  match_id,
+		  racer_1_name,
+		  racer_2_name,
+		  scheduled_time,
+		  cawmentator_name,
+		  vod,
+		  autogenned,
+		  racer_1_wins,
+		  racer_2_wins 
+		FROM
+		  season_8.match_info 
+		WHERE
+		  completed = 1
+		`); err == sql.ErrNoRows {
+		return sweepsInfo, nil
+	} else if err != nil {
+		return sweepsInfo, err
+	} else {
+		rows = v
+	}
+	defer rows.Close()
+
+	// Find all the users and stick them into the event structure
+	for rows.Next() {
+		var sweeps Sweep
+		if err := rows.Scan(
+			&sweeps.MatchID,
+			&sweeps.Racer1,
+			&sweeps.Racer2,
+			&sweeps.StartTime,
+			&sweeps.Cawmentator,
+			&sweeps.VODLink,
+			&sweeps.AutoGenned,
+			&sweeps.Racer1Wins,
+			&sweeps.Racer2Wins,
+		); err != nil {
+			return sweepsInfo, err
+		}
+		sweepsInfo = append(sweepsInfo, sweeps)
+	}
+
+	return sweepsInfo, nil
 }
 
 /*

@@ -1,0 +1,80 @@
+{{ define "content" }}
+
+<!-- Main -->
+<div id="main" class="wrapper style1">
+   <div class="container">
+      <!-- Content -->
+      <center>
+        <section id="upper">
+          <header class="">
+            <div class="row">
+              <div class="12u">
+                <img src="/public/images/condor_logo.png" />
+              </div>
+            </div>
+          </header>
+        </section>
+      </center>
+      <p>
+      </p>
+      <section id="s" class="box">
+        <table class="table">
+          <thead>
+            <tr >
+              <th colspan=2 class="results">
+                Total Completed Matches: {{ .TotalMatches }}
+              </th>
+            </tr>
+            <tr>
+              <th class="results">
+                Auto-Generated Matches
+              </th>
+              <th class="results">
+                Challenge Matches
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="results">
+                {{ .AutoGensLen }} ({{ .AGPerc }}%)
+              </td>
+              <td class="results">
+                {{ .ChallengesLen }} ({{ .CPerc }}%)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+            <section id="s" class="box">
+        <table class="table">
+          <thead>
+            <tr >
+              <th colspan=2 class="results">
+                Total Completed Sweeps: {{ .TotalSweeps }}
+              </th>
+            </tr>
+            <tr>
+              <th class="results">
+                Auto-Generated Matches
+              </th>
+              <th class="results">
+                Challenge Matches
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="results">
+                {{ .AutoGensSweepLen }} ({{ .AGSweepsPerc }}%)
+              </td>
+              <td class="results">
+                {{ .ChalSweepLen }} ({{ .CSweepsPerc }}%)
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+{{ end }}

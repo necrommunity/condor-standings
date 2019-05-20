@@ -32,7 +32,7 @@ func httpAPI(c *gin.Context) {
 	w := c.Writer
 
 	w.Header().Set("Content-Type", "application/json")
-	jsonData, err := json.Marshal(apiDescriptionsJson)
+	jsonData, err := json.Marshal(json.RawMessage(apiDescriptionsJson["api"]))
 	
 	if err != nil {
 		log.Error("Couldn't generate JSON")
@@ -237,6 +237,40 @@ func httpSAPI(c *gin.Context) {
 	}
 
 	jsonData, err := json.MarshalIndent(foundEvent, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		//w.Write([]byte("Please search for a user"))
+		return
+	}
+
+	w.Write(jsonData)
+}
+
+// @Title S8 Sweeps Results 
+// @Description Lists all sweeps on autogenned stuff from season 8 specifically
+// @Accept plain
+// @Produce json
+// @Param event	path	string	true	"Event Name"
+// @Success 200 {object} models.Event
+// @Failure 404 {object} APIError "Nothing found"
+// @Router /api/s [get]
+// httpSAPI gets the s8 results for manipulating
+func httpSweepsAPI(c *gin.Context) {
+	// Local variables
+
+	w := c.Writer
+
+	// Set the header
+	w.Header().Set("Content-Type", "application/json")
+
+	sweepsResults, err := db.EventAPI.GetSweepsInfo()
+
+	if err != nil {
+		log.Error("Couldn't get event info: ", err)
+	}
+
+
+	jsonData, err := json.MarshalIndent(sweepsResults, "", "\t")
 	if err != nil {
 		log.Error("Couldn't generate JSON")
 		//w.Write([]byte("Please search for a user"))
