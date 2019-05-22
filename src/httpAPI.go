@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"flag"
 	"strings"
+	"fmt"
+	// "math"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
@@ -274,6 +276,74 @@ func httpSweepsAPI(c *gin.Context) {
 	if err != nil {
 		log.Error("Couldn't generate JSON")
 		//w.Write([]byte("Please search for a user"))
+		return
+	}
+
+	w.Write(jsonData)
+}
+
+func httpUsersAPI(c *gin.Context) {
+	// Local variables
+	// w := c.Writer
+
+	// userName := c.Params.ByName("user")
+
+	// if userName == "" {
+	// 	w.Write([]byte("{\"Error\": \"No username found\"}"))
+	// 	return
+	// }
+	// foundUser, err := db.EventAPI.GetUserRaces(userName)
+	// if err != nil {
+	// 	log.Error("Couldn't get user, ", userName, " info: ", err)
+	// }
+
+	
+	// jsonData, err := json.MarshalIndent(foundUser, "", "\t")
+	// if err != nil {
+	// 	log.Error("Couldn't generate JSON")
+	// 	return
+	// }
+
+	// w.Write([]byte('HI'))
+}
+
+func httpUserAPI(c *gin.Context) {
+	// Local variables
+	w := c.Writer
+
+	userName := c.Params.ByName("user")
+
+	if userName == "" {
+		w.Write([]byte("{\"Error\": \"No username found\"}"))
+		return
+	}
+	FoundUser, err := db.EventAPI.GetUserRaces(userName)
+	if err != nil {
+		log.Error("Couldn't get user, ", userName, " info: ", err)
+	}
+
+	for i := 0; i < len(FoundUser); i++ {
+		w := float64(FoundUser[i].RaceTime)/float64(100)
+		ms := int((float64(FoundUser[i].RaceTime/100) - w) * -100)
+		s := ((FoundUser[i].RaceTime/100) % 60)
+		m := ((FoundUser[i].RaceTime/(100*60)) % 60)
+		h := ((FoundUser[i].RaceTime/(100*60*60)) % 24)
+		var fTime string
+		if h > 0 {
+			fTime += fmt.Sprintf("%02d:", h)
+		}
+		fTime += fmt.Sprintf("%02d:%02d.%02d", m, s, ms)
+		FoundUser[i].RaceTimeF = fTime
+		for j := range FoundUser[i].AutoGenFlag {
+			if int(FoundUser[i].AutoGenFlag[j]) == int(1) {
+				FoundUser[i].IsAutoGen = true
+			}
+		}
+	}
+
+	jsonData, err := json.MarshalIndent(FoundUser, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
 		return
 	}
 

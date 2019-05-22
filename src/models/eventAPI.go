@@ -42,6 +42,21 @@ type Sweep struct {
 	Racer2Wins	int	   `json:"racer2Wins"`
 }
 
+type Match struct {
+	RaceID int `json:"raceID"`
+	RaceTime int `json:"raceTime"`
+	RaceTimeF string `json:"raceTimeF"`
+	RaceSeed int `json:"raceSeed"`
+	RaceWinner int `json:"raceWinner"`
+	Racer1ID int `json:"racer1ID"`
+	Racer1Name string `json:"racer1Name"`
+	Racer2ID int `json:"racer2ID"`
+	Racer2Name string `json:"racer2Name"`
+	RaceVod sql.NullString `json:"raceVod"`
+	AutoGenFlag []byte `json:"autoGenFlag"`
+	IsAutoGen bool `json:"isAutoGen"`
+}
+
 // GetEventInfoGroups gets all needed information about a specific event
 func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	var rows *sql.Rows
@@ -214,141 +229,71 @@ func (*EventAPI) GetSweepsInfo() ([]Sweep, error) {
 	return sweepsInfo, nil
 }
 
-/*
-// GetEventInfo gets specific event info
-func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
+func (*EventAPI) GetUserRaces(userName string) ([]Match, error) {
 	var rows *sql.Rows
-	TheEvent := Event{EventName: eventName, Participants: nil}
+	var matchInfo []Match
 	if v, err := db.Query(`
-		SELECT
-		    u.discord_name AS Username,
-				u.twitch_name as tUsername,
-		    SUM(CASE
-		        WHEN rr.rank = 1 THEN 1
-		        ELSE 0
-		    END) AS Points,
-		    COUNT(rr.user_id) AS Played
+		SELECT 
+				rr.race_id,
+				mr.winner,
+				rr.time,
+				r.seed,
+				m.racer_1_id,
+				m.racer_2_id,
+				m.vod,
+				(SELECT 
+								e.twitch_name
+						FROM
+								necrobot.users e
+						WHERE
+								e.user_id = m.racer_1_id) AS racer_1_name,
+				(SELECT 
+								e.twitch_name
+						FROM
+								necrobot.users e
+						WHERE
+								e.user_id = m.racer_2_id) AS racer_2_name,
+				m.autogenned
 		FROM
-		    ` + eventName + `.entrants e
-		        LEFT JOIN
-		    necrobot.users u ON u.user_id = e.user_id
-		        LEFT JOIN
-		    ` + eventName + `.race_runs rr ON rr.user_id = e.user_id
+				season_8.match_races mr
+						LEFT JOIN
+				season_8.races r ON r.race_id = mr.race_id
+						LEFT JOIN
+				season_8.matches m ON m.match_id = mr.match_id
+						LEFT JOIN
+				season_8.race_runs rr ON rr.race_id = r.race_id
+						LEFT JOIN
+				necrobot.users e ON e.user_id = rr.user_id
 		WHERE
-			u.discord_id IS NOT NULL
-			AND u.discord_name IS NOT NULL
-			AND u.twitch_name IS NOT NULL
-		GROUP BY u.discord_name
-		ORDER BY Points DESC , Played DESC
-		`); err == sql.ErrNoRows {
-		return TheEvent, nil
+				e.twitch_name = ?
+		GROUP BY rr.race_id
+	`, userName); err == sql.ErrNoRows {
+		return matchInfo, nil
 	} else if err != nil {
-		return TheEvent, err
+		return matchInfo, err
 	} else {
 		rows = v
 	}
 	defer rows.Close()
 
-	// Find all the users and stick them into the event structure
-	participants := make([]Participant, 0)
 	for rows.Next() {
-		var participant Participant
+		var matches Match
 		if err := rows.Scan(
-			&participant.DiscordUsername,
-			&participant.TwitchUsername,
-			&participant.EventPoints,
-			&participant.EventPlayed,
+		 &matches.RaceID,
+		 &matches.RaceWinner,
+		 &matches.RaceTime,
+		 &matches.RaceSeed,
+		 &matches.Racer1ID,
+		 &matches.Racer2ID,
+		 &matches.RaceVod,
+		 &matches.Racer1Name,
+		 &matches.Racer2Name,
+		 &matches.AutoGenFlag,
 		); err != nil {
-			return TheEvent, err
+			return matchInfo, err
 		}
-
-		participants = append(participants, participant)
+		matchInfo = append(matchInfo, matches)
 	}
 
-	TheEvent.Participants = participants
-
-	return TheEvent, nil
+	return matchInfo, nil
 }
-
-// GetUsers gets player data to populate the player's profile page
-/*func (*Users) GetEventInfo(eventName string) ([]UserAccount, int, error) {
-	var rows *sql.Rows
-	if v, err := db.Query(`
-		SELECT
-		    u.discord_id,
-				u.discord_name,
-
-		FROM
-		    users u
-		WHERE
-		    u.discord_id IS NOT NULL
-				AND u.discord_name IS NOT NULL
-		ORDER BY u.discord_name ASC
-	`); err == sql.ErrNoRows {
-		return nil, 0, nil
-	} else {
-		rows = v
-	}
-	defer rows.Close()
-
-	// Iterate over the user profile results
-	userAccounts := make([]UserAccount, 0)
-	for rows.Next() {
-		var row UserAccount
-		if err := rows.Scan(
-			&row.DiscordID,
-			&row.DiscordUsername,
-		); err != nil {
-			return nil, 0, err
-		}
-
-		userAccounts = append(userAccounts, row)
-	}
-
-	// Find total amount of users
-	var allUsers int
-	if err := db.QueryRow(`
-		SELECT count(discord_id)
-		FROM users
-		WHERE discord_id IS NOT NULL
-	`).Scan(&allUsers); err != nil {
-		return nil, 0, err
-	}
-
-	return userAccounts, allUsers, nil
-}
-
-func (*Tables) GetRacersForEvent(eventName string) ([]FoundUserNDWC, int, error) {
-	var rows *sql.Rows
-	if v, err := db.Query(`
-		SELECT
-				u.discord_id,
-				u.discord_name
-		FROM
-				users u
-		WHERE
-				u.discord_id IS NOT NULL
-				AND u.discord_name IS NOT NULL
-		ORDER BY u.discord_name ASC
-	`); err == sql.ErrNoRows {
-		return nil, 0, nil
-	} else {
-		rows = v
-	}
-	defer rows.Close()
-
-	// Iterate over the user profile results
-	userAccounts := make([]UserAccount, 0)
-	for rows.Next() {
-		var row UserAccount
-		if err := rows.Scan(
-			&row.DiscordID,
-			&row.DiscordUsername,
-		); err != nil {
-			return nil, 0, err
-		}
-
-		userAccounts = append(userAccounts, row)
-	}
-
-}*/

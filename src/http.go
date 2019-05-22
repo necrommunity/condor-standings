@@ -72,6 +72,7 @@ type TemplateData struct {
 	TotalSweeps     int
 	AGSweepsPerc    string
 	CSweepsPerc     string
+	UserMatchInfo	[]models.Match
 }
 
 //  -----------------------
@@ -145,12 +146,16 @@ func httpInit() {
 	httpRouter.GET("/teamresults", httpTeamResults)
 	httpRouter.GET("/s", httpS)
 	httpRouter.GET("/sweeps", httpSweeps)
+	// httpRouter.GET("/user", httpUser)
+	httpRouter.GET("/user/:user", httpUserInfo)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
 	httpRouter.GET("/api/teamresults", httpTeamAPI)
 	httpRouter.GET("/api/s", httpSAPI)
 	httpRouter.GET("/api/sweeps", httpSweepsAPI)
+	httpRouter.GET("/api/user", httpUsersAPI)
+	httpRouter.GET("/api/user/:user", httpUserAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 
