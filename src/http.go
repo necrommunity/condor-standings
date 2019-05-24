@@ -73,6 +73,8 @@ type TemplateData struct {
 	AGSweepsPerc    string
 	CSweepsPerc     string
 	UserMatchInfo	[]models.Match
+	TwitchUsername	string
+	TwitterUsername string
 }
 
 //  -----------------------

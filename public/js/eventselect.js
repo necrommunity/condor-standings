@@ -26,7 +26,7 @@ function changeEvent(eventName, prettyName) {
     var thereIsAGroup = false;
     var thereIsATier = false;
     for (var key in data.Participants) {
-      tabledata = tabledata + '<tr><td><a href="https://www.twitch.tv/' + data.Participants[key]['twitchUsername'] + '" target="_blank" >' + data.Participants[key]['twitchUsername'] + '</td><td>' + data.Participants[key]['eventWins'] + '</td><td>' + data.Participants[key]['eventLosses'] + '</td>';
+      tabledata = tabledata + '<tr><td><a href="/user/' + data.Participants[key]['twitchUsername'] + '" >' + data.Participants[key]['twitchUsername'] + '</td><td>' + data.Participants[key]['eventWins'] + '</td><td>' + data.Participants[key]['eventLosses'] + '</td>';
       if (data.Participants[key]['groupName']) {
         tabledata = tabledata + '<td>' + data.Participants[key]['groupName'] + '</td>';
         thereIsAGroup = true;

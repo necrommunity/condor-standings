@@ -14,9 +14,21 @@
           </header>
         </section>
       </center>
-      <p>
-      </p>
+      
+      <center>
+        {{ if .TwitchUsername }}
+        <a href="https://twitch.tv/{{ .TwitchUsername }}" target="_blank">
+          <img src="/public/images/Glitch_White_RGB.png"  height="24px" width="24px"/>
+        </a>
+        {{ end }}
+       {{ if .TwitterUsername }}
+        <a href="https://twitter.com/{{ .TwitterUsername }}" target="_blank">
+          <img src="/public/images/Twitter_Logo_Blue.png"  height="24px" width="24px"/>
+        </a>
+        {{ end }}        
+      </center>
       <section id="matches" class="box">
+
         <table class="table">
           <thead>
             <tr>
