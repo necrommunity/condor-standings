@@ -18,6 +18,16 @@ import (
 //  --------------------------------
 
 
+func httpUser(c *gin.Context) {
+	w := c.Writer
+	
+	data := TemplateData{
+		Title: 			 "Season 8 Users",
+		
+	}
+	httpServeTemplate(w, "user", data)
+
+}
 
 
 

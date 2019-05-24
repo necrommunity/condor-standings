@@ -49,9 +49,12 @@
 			});
 
 		// Dropdowns.
-			$('#nav > ul').dropotron({
-				alignment: 'right',
-				hideDelay: 350
+			$('#main-nav > ul').dropotron({
+				mode: 'slide',
+				hoverDelay: 50,
+				hideDelay: 150,
+				alignment: 'right'
+				
 			});
 
 		// Off-Canvas Navigation.

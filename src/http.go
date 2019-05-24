@@ -146,7 +146,7 @@ func httpInit() {
 	httpRouter.GET("/teamresults", httpTeamResults)
 	httpRouter.GET("/s", httpS)
 	httpRouter.GET("/sweeps", httpSweeps)
-	// httpRouter.GET("/user", httpUser)
+	httpRouter.GET("/user", httpUser)
 	httpRouter.GET("/user/:user", httpUserInfo)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls

@@ -50,7 +50,8 @@
     <link rel="stylesheet" href="/public/css/condor.css" />
     <!--[if lte IE 9]><link rel="stylesheet" href="/public/css/ie9.css" /><![endif]-->
     <!--[if lte IE 8]><link rel="stylesheet" href="/public/assets/css/ie8.css" /><![endif]-->
-    <script src="/public/js/jquery.min.js"></script>
+    
+    
   </head>
   <body class="landing">
     <div id="page-wrapper">
@@ -58,8 +59,16 @@
     <header id="header">
       <h1 id="logo"><a href="https://twitter.com/condorleague" target="_blank"><img height="50%" src="/public/images/condor_crow.png" /></a></h1>
 
-      <nav id="nav">
+      <nav id="main-nav">
         <ul>
+          <li>
+            <a href="#">Stuff</a>
+            <ul>
+              <li><a href="/s">S Wins</a></li>
+              <li><a href="/sweeps">Sweeps</a></li>
+              <li><a href="/user">User Stats</a></li>
+            </ul>
+          </li>
           <li><a href="/teamresults">Team Results</a></li>
           <li><a href="https://condor.live/schedule" target="_blank">Schedule</a></li>
           <li><a href="https://condor.live/standings" target="_blank">Standings</a></li>
@@ -67,16 +76,28 @@
         </ul>
       </nav>
     </header>
-
+  
   {{ template "content" . }}
-  {{ if eq .Title "Home" }}
-  <script src="/public/js/eventselect.js"></script>
-  {{ end }}
-  {{ if eq .Title "Team Results" }}
-  <script src="/public/js/teamresults.js"></script>
-  {{ end }}
+
   <center>Find this project on <a class="github" href="https://github.com/necrommunity/condor-standings/" target="_blank"><img class="github-logo" src="/public/images/github.png" /></a></center>
   <center>Powered by<a class="github" href="https://golang.org/" target="_blank"><img height="54px" class="github-logo" src="/public/images/go.png" /></a></center>
+  <script src="/public/js/jquery.min.js"></script>
+  <script src="/public/js/jquery.scrolly.min.js"></script>
+  <script src="/public/js/jquery.dropotron.min.js"></script>
+  <script src="/public/js/jquery.scrollex.min.js"></script>
+  <script src="/public/js/browser.min.js"></script>
+  <script src="/public/js/breakpoints.min.js"></script>
+  <script src="/public/js/skel.min.js"></script>
+  <script src="/public/js/skel-viewport.min.js"></script>
+  <script src="/public/js/util.js"></script>
+  <script src="/public/js/main.js"></script>
+  {{/* <script src="/public/js/index.js"></script> */}}
+  {{ if eq .Title "Home" }}
+    <script src="/public/js/eventselect.js"></script>
+  {{ end }}
+  {{ if eq .Title "Team Results" }}
+    <script src="/public/js/teamresults.js"></script>
+  {{ end }}
   </body>
 </html>
 {{ end }}
