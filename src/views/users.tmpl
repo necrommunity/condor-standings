@@ -8,77 +8,17 @@
           <header class="">
             <div class="row">
               <div class="12u">
-                <a href="/"><img src="/public/images/condor_logo.png" /></a>
+                <a href="/"><img src="/public/images/condor_logo.png" height="45px" /></a>
               </div>
             </div>
           </header>
         </section>
       </center>
+      <p>
+      </p>
       <center>
-        {{ if .TwitchUsername }}
-        <a href="https://twitch.tv/{{ .TwitchUsername }}" target="_blank">
-          <img src="/public/images/Glitch_White_RGB.png"  height="24px" width="24px"/>
-        </a>
-        {{ end }}
-       {{ if .TwitterUsername }}
-        <a href="https://twitter.com/{{ .TwitterUsername }}" target="_blank">
-          <img src="/public/images/Twitter_Logo_Blue.png"  height="24px" width="24px"/>
-        </a>
-        {{ end }}        
+      Uhh, go up to the top and do a /twitch_name or something :)
       </center>
-      <section id="matches" class="box">
-        <table class="table">
-          <thead>
-            <tr>
-              <th class="results">
-                Racer 1
-              </th>
-              <th class="results">
-                Racer 2
-              </th>
-              <th class="results">
-                Time
-              </th>
-              <th class="results">
-                Seed
-              </th>
-              <th class="results">
-                Type
-              </th>
-              <th class="results">
-                VOD
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-            {{ range .UserMatchInfo }}
-              <td class="results">
-                <a href="/user/{{ .Racer1Name }}">{{ .Racer1Name }}</a> {{ if eq .RaceWinner  1 }} 🎉{{ end }}
-              </td>
-              <td class="results">
-                <a href="/user/{{ .Racer2Name }}">{{ .Racer2Name }}</a> {{ if eq .RaceWinner 2 }} 🎉{{ end }}
-              </td>
-              <td class="results">
-                {{ .RaceTimeF }}
-              </td>
-              <td class="results">
-                {{ .RaceSeed }}
-              </td>
-              <td class="results">
-                {{ if .IsAutoGen }} AutoGen {{ else }} Challenge {{ end }}
-              </td>
-              <td class="results">
-                {{ if .RaceVod.Value }}
-                <a href="{{ .RaceVod.String }}" target="_blank">🎥</a>
-                {{ end }}
-              </td>
-
-            </tr>
-            {{ end }}
-          </tbody>
-        </table>
-      </section>
     </div>
 </div>
 

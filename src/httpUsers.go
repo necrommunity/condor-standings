@@ -7,7 +7,7 @@ import (
 	"time"
 	// "strings"
 	"fmt"
-
+	"math" 
 	"github.com/gin-gonic/gin"
 	"github.com/sillypears/condor-standings/src/log"
 	"github.com/sillypears/condor-standings/src/models"
@@ -17,6 +17,19 @@ import (
 //  The landing page for the website
 //  --------------------------------
 
+func formatTime(t int) (string) {
+	w := float64(t)/float64(100)
+	ms := int((float64(t/100) - w) * -100)
+	s := ((t/100) % 60)
+	m := ((t/(100*60)) % 60)
+	h := ((t/(100*60*60)) % 24)
+	var fTime string
+	if h > 0 {
+		fTime += fmt.Sprintf("%02d:", h)
+	}
+	fTime += fmt.Sprintf("%02d:%02d.%02d", m, s, ms)
+	return fTime
+}
 
 func httpUser(c *gin.Context) {
 	w := c.Writer
@@ -25,7 +38,7 @@ func httpUser(c *gin.Context) {
 		Title: 			 "Season 8 Users",
 		
 	}
-	httpServeTemplate(w, "user", data)
+	httpServeTemplate(w, "users", data)
 
 }
 
@@ -67,12 +80,53 @@ func httpUserInfo(c *gin.Context) {
 		log.Error(jsonErr)
 	}
 
+	userWins := 0
+	userLosses := 0
+	
+	addTime := 0
+	fstTime := -1
+	for _, race := range UserMatches {
+		winner := race.RaceWinner
+
+		if twitchUsername == race.Racer1Name && winner == 1 {
+			userWins += 1
+			addTime += race.RaceTime
+			if fstTime > race.RaceTime || fstTime == -1  {
+				fstTime = race.RaceTime
+			}
+		} else if twitchUsername == race.Racer2Name && winner == 2 {
+			userWins += 1
+			addTime += race.RaceTime
+			if fstTime > race.RaceTime  || fstTime == -1 {
+				fstTime = race.RaceTime
+			}
+		} else {
+			userLosses += 1
+		}
+
+	}
+
+	avgTime := addTime/len(UserMatches)
+	avgTimeF := formatTime(avgTime)
+	fstTimeF := formatTime(fstTime)
+	
+	userWinsPerc := math.Round( (float64(userWins) / float64(len(UserMatches)) * 10000 ) / 100 )
+	userLossPerc := math.Round( (float64(userLosses) / float64(len(UserMatches)) * 10000 ) / 100 )
+
 	data := TemplateData{
 		Title: 			 twitchUsername + " Match Info",
 		TwitchUsername:	 twitchUsername,
 		TwitterUsername: twitterUsername,
 		UserMatchInfo:   UserMatches,
+		UserWins:        userWins,
+		WinPerc:         userWinsPerc,
+		LossPerc:        userLossPerc,
+		UserLosses:      userLosses,
+		AvgTime:		 avgTime,
+		AvgTimeF:        avgTimeF,
+		FastTime:        fstTime,
+		FastTimeF:       fstTimeF,
 	}
 
-	httpServeTemplate(w, "users", data)
+	httpServeTemplate(w, "user", data)
 }

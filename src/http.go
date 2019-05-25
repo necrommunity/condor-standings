@@ -45,7 +45,20 @@ type Event struct {
 }
 
 type TemplateData struct {
+	// Global 
 	Title       	string
+	
+	// Home
+
+	// API - for whatever reason 
+
+	// Team Results Page
+
+	// Sweeps Page
+	
+	// S Page
+
+	
 	FoundTables 	[]models.ReturnedTable
 	Results     	map[string]map[string]int
 	ResultsAll  	map[string]map[string]int
@@ -72,9 +85,21 @@ type TemplateData struct {
 	TotalSweeps     int
 	AGSweepsPerc    string
 	CSweepsPerc     string
-	UserMatchInfo	[]models.Match
+
+	// User
+
+	// Users
 	TwitchUsername	string
 	TwitterUsername string
+	UserWins        int
+	UserLosses      int
+	UserMatchInfo	[]models.Match
+	AvgTime         int
+	AvgTimeF        string
+	FastTime        int
+	FastTimeF       string
+	WinPerc         float64
+	LossPerc        float64
 }
 
 //  -----------------------
