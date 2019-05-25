@@ -82,22 +82,24 @@ func httpUserInfo(c *gin.Context) {
 
 	userWins := 0
 	userLosses := 0
-	
 	addTime := 0
-	fstTime := -1
+	fstTime := 0
+	avgTime := 0
+	userWinsPerc := 0.00
+	userLossPerc := 0.00
 	for _, race := range UserMatches {
 		winner := race.RaceWinner
 
 		if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer1Name) && winner == 1 {
 			userWins += 1
 			addTime += race.RaceTime
-			if fstTime > race.RaceTime || fstTime == -1  {
+			if fstTime > race.RaceTime || fstTime == 0  {
 				fstTime = race.RaceTime
 			}
 		} else if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer2Name) && winner == 2 {
 			userWins += 1
 			addTime += race.RaceTime
-			if fstTime > race.RaceTime  || fstTime == -1 {
+			if fstTime > race.RaceTime  || fstTime == 0 {
 				fstTime = race.RaceTime
 			}
 		} else {
@@ -106,12 +108,15 @@ func httpUserInfo(c *gin.Context) {
 
 	}
 
-	avgTime := addTime/userWins
+	if userWins > 0 {
+
+		avgTime = addTime/userWins
+		userWinsPerc = math.Round( (float64(userWins) / float64(len(UserMatches)) * 10000 ) / 100 )
+		userLossPerc = math.Round( (float64(userLosses) / float64(len(UserMatches)) * 10000 ) / 100 )
+	}
+	
 	avgTimeF := formatTime(avgTime)
 	fstTimeF := formatTime(fstTime)
-	
-	userWinsPerc := math.Round( (float64(userWins) / float64(len(UserMatches)) * 10000 ) / 100 )
-	userLossPerc := math.Round( (float64(userLosses) / float64(len(UserMatches)) * 10000 ) / 100 )
 
 	data := TemplateData{
 		Title: 			 twitchUsername + " Match Info",
