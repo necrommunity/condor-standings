@@ -47,30 +47,19 @@ type Event struct {
 type TemplateData struct {
 	// Global 
 	Title       	string
-	
-	// Home
-
+		
 	// API - for whatever reason 
 
-	// Team Results Page
-
-	// Sweeps Page
-	
-	// S Page
-
-	
+	// Home
 	FoundTables 	[]models.ReturnedTable
+
+	// Team Results Page
 	Results     	map[string]map[string]int
 	ResultsAll  	map[string]map[string]int
 	Headers     	[]string
 	TeamList    	map[string][]string
-	SEvent			models.Event
-	AllSWins		int
-	AllNonSWins		int
-	AllSWinsPerc	string
-	AllNonSWinsPerc	string
-	AllSParts		[]models.Participant
-	AllNonSParts	[]models.Participant
+
+	// Sweeps Page
 	AutoGens	    []models.Sweep
 	AutoGensLen     int
 	AutoGensSweepLen int
@@ -85,6 +74,15 @@ type TemplateData struct {
 	TotalSweeps     int
 	AGSweepsPerc    string
 	CSweepsPerc     string
+
+	// S Page
+	SEvent			models.Event
+	AllSWins		int
+	AllNonSWins		int
+	AllSWinsPerc	string
+	AllNonSWinsPerc	string
+	AllSParts		[]models.Participant
+	AllNonSParts	[]models.Participant
 
 	// User
 
