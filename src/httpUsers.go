@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-	// "strings"
+	"strings"
 	"fmt"
 	"math" 
 	"github.com/gin-gonic/gin"
@@ -88,13 +88,13 @@ func httpUserInfo(c *gin.Context) {
 	for _, race := range UserMatches {
 		winner := race.RaceWinner
 
-		if twitchUsername == race.Racer1Name && winner == 1 {
+		if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer1Name) && winner == 1 {
 			userWins += 1
 			addTime += race.RaceTime
 			if fstTime > race.RaceTime || fstTime == -1  {
 				fstTime = race.RaceTime
 			}
-		} else if twitchUsername == race.Racer2Name && winner == 2 {
+		} else if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer2Name) && winner == 2 {
 			userWins += 1
 			addTime += race.RaceTime
 			if fstTime > race.RaceTime  || fstTime == -1 {
@@ -106,7 +106,7 @@ func httpUserInfo(c *gin.Context) {
 
 	}
 
-	avgTime := addTime/len(UserMatches)
+	avgTime := addTime/userWins
 	avgTimeF := formatTime(avgTime)
 	fstTimeF := formatTime(fstTime)
 	
