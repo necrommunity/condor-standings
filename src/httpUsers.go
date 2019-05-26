@@ -48,13 +48,14 @@ func httpUserInfo(c *gin.Context) {
 	w := c.Writer
 
 	twitchUsername := c.Params.ByName("user")
+	eventName := "season_8"
 	twitterUsername := ""
 	if twitchUsername == "" {
 		w.Write([]byte("{\"Error\": \"No username found\"}"))
 		return
 	}
 
-	url := fmt.Sprintf("https://some.pizza/api/user/%s",  twitchUsername)
+	url := fmt.Sprintf("https://some.pizza/api/user/%s/%s", eventName, twitchUsername)
 	log.Info(url)
 	urlClient := http.Client{
 		Timeout: time.Second * 2,

@@ -284,27 +284,28 @@ func httpSweepsAPI(c *gin.Context) {
 
 func httpUsersAPI(c *gin.Context) {
 	// Local variables
-	// w := c.Writer
+	w := c.Writer
 
 	// userName := c.Params.ByName("user")
-
-	// if userName == "" {
-	// 	w.Write([]byte("{\"Error\": \"No username found\"}"))
-	// 	return
-	// }
-	// foundUser, err := db.EventAPI.GetUserRaces(userName)
-	// if err != nil {
-	// 	log.Error("Couldn't get user, ", userName, " info: ", err)
-	// }
+	eventName := c.Params.ByName("event")
+	// eventName := "season_8"
+	if eventName == "" {
+		w.Write([]byte("{\"Error\": \"No event found\"}"))
+		return
+	}
+	userList, err := db.EventAPI.GetUsers(eventName)
+	if err != nil {
+		log.Error("Couldn't get users: ", err)
+	}
 
 	
-	// jsonData, err := json.MarshalIndent(foundUser, "", "\t")
-	// if err != nil {
-	// 	log.Error("Couldn't generate JSON")
-	// 	return
-	// }
+	jsonData, err := json.MarshalIndent(userList, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		return
+	}
 
-	// w.Write([]byte('HI'))
+	w.Write(jsonData)
 }
 
 func httpUserAPI(c *gin.Context) {
@@ -312,12 +313,14 @@ func httpUserAPI(c *gin.Context) {
 	w := c.Writer
 
 	userName := c.Params.ByName("user")
+	eventName := c.Params.ByName("event")
+	// eventName := "season_8"
 
 	if userName == "" {
 		w.Write([]byte("{\"Error\": \"No username found\"}"))
 		return
 	}
-	FoundUser, err := db.EventAPI.GetUserRaces(userName)
+	FoundUser, err := db.EventAPI.GetUserRaces(userName, eventName)
 	if err != nil {
 		log.Error("Couldn't get user, ", userName, " info: ", err)
 	}

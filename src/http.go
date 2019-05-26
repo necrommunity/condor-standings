@@ -180,7 +180,8 @@ func httpInit() {
 	httpRouter.GET("/api/s", httpSAPI)
 	httpRouter.GET("/api/sweeps", httpSweepsAPI)
 	httpRouter.GET("/api/user", httpUsersAPI)
-	httpRouter.GET("/api/user/:user", httpUserAPI)
+	httpRouter.GET("/api/user/:event", httpUsersAPI)
+	httpRouter.GET("/api/user/:event/:user", httpUserAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 

@@ -57,6 +57,11 @@ type Match struct {
 	IsAutoGen bool `json:"isAutoGen"`
 }
 
+type UserNames struct {
+	TwitchName string `json;"twitchName"`
+	DiscordName string `json:"discordName"`
+}
+
 // GetEventInfoGroups gets all needed information about a specific event
 func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	var rows *sql.Rows
@@ -229,7 +234,41 @@ func (*EventAPI) GetSweepsInfo() ([]Sweep, error) {
 	return sweepsInfo, nil
 }
 
-func (*EventAPI) GetUserRaces(userName string) ([]Match, error) {
+func (*EventAPI) GetUsers(eventName string) ([]UserNames, error) {
+	var rows *sql.Rows
+	var userList []UserNames
+	if v, err := db.Query(`
+	SELECT 
+    	u.twitch_name, u.discord_name
+	FROM
+    	` + eventName + `.entrants e
+    LEFT JOIN
+    	necrobot.users u ON e.user_id = u.user_id
+	`); err == sql.ErrNoRows {
+		return userList, nil
+	} else if err != nil {
+		return userList, err
+	} else {
+		rows = v
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var user UserNames
+		if err := rows.Scan(
+		 &user.TwitchName,
+		 &user.DiscordName,
+
+		); err != nil {
+			return userList, err
+		}
+		userList = append(userList, user)
+	}
+
+	return userList, nil
+}
+
+func (*EventAPI) GetUserRaces(userName string, eventName string) ([]Match, error) {
 	var rows *sql.Rows
 	var matchInfo []Match
 	if v, err := db.Query(`
@@ -255,13 +294,13 @@ func (*EventAPI) GetUserRaces(userName string) ([]Match, error) {
 								e.user_id = m.racer_2_id) AS racer_2_name,
 				m.autogenned
 		FROM
-				season_8.match_races mr
+				`+ eventName +`.match_races mr
 						LEFT JOIN
-				season_8.races r ON r.race_id = mr.race_id
+				`+ eventName +`.races r ON r.race_id = mr.race_id
 						LEFT JOIN
-				season_8.matches m ON m.match_id = mr.match_id
+				`+ eventName +`.matches m ON m.match_id = mr.match_id
 						LEFT JOIN
-				season_8.race_runs rr ON rr.race_id = r.race_id
+				`+ eventName +`.race_runs rr ON rr.race_id = r.race_id
 						LEFT JOIN
 				necrobot.users e ON e.user_id = rr.user_id
 		WHERE
