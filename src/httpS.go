@@ -53,7 +53,7 @@ func httpS(c *gin.Context) {
 	
 	// Find wins based on name
 	for _, parts := range ReturnedEvent.Participants {
-		if strings.HasPrefix(parts.TwitchUsername, "s") {
+		if strings.HasPrefix(strings.ToLower(parts.TwitchUsername), "s") {
 			sWins += parts.EventWins
 			sParticipants = append(sParticipants, parts)
 		} else {
