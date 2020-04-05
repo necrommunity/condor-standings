@@ -23,7 +23,7 @@ func (*Tables) GetTables() ([]FoundTable, error) {
     FROM
 			INFORMATION_SCHEMA.TABLES ist
 		LEFT JOIN
-			necrobot.leagues nl
+			necrobot.leagues_old nl
 				ON nl.schema_name = ist.table_schema
     WHERE
       table_schema not in ('information_schema', 'necrobot' )
