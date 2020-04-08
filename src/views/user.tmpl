@@ -3,26 +3,36 @@
 <div id="main" class="wrapper style1">
    <div class="container">
       <!-- Content -->
-      <center>
+
         <section id="upper">
           <header class="">
             <div class="row">
-              <div class="12u">
+              <div class="8u 12u align-left">
                 <a href="/"><img src="/public/images/condor_logo.png" height="45px"/></a>
+              </div>
+              <div class="4u 12u">
+                <select id="eventSelector" onChange='changeEvent(this[this.selectedIndex].value, this[this.selectedIndex].text, {{.TwitchUsername}});'>
+                 <option value="" disabled>Events</option>
+                 {{ range .FoundTables }}
+                   <option value="{{ .EventName }}"> 
+                   {{ .PrettyName }}
+                   </option>
+                 {{ end }}
+                 </select>
               </div>
             </div>
           </header>
         </section>
-      </center>
+
       <table class="">
         <thead>
         </thead>
-          <tbody>
-          <tr>
-            <td width="">
+          <tbody id="info">
+          <tr id="wins-tr">
+            <td width="" id="wins-td">
               Wins: {{ .UserWins }} ({{ .WinPerc }}%)  | Losses: {{ .UserLosses }} ({{ .LossPerc }}%)
             </td>
-            <td>
+            <td id="fastest-win">
               Fastest Win: {{ .FastTimeF }} | Average Win: {{ .AvgTimeF }}
             </td>
             <td width="" style="text-align: right">
@@ -64,7 +74,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="races">
             <tr>
             {{ range .UserMatchInfo }}
               <td class="results">
@@ -94,6 +104,7 @@
         </table>
       </section>
     </div>
+    <input type="hidden" id="twitchUsername" value="{{.TwitchUsername}}" />
 </div>
 
 {{ end }}

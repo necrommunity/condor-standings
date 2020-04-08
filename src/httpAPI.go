@@ -311,6 +311,7 @@ func httpUsersAPI(c *gin.Context) {
 func httpUserAPI(c *gin.Context) {
 	// Local variables
 	w := c.Writer
+	w.Header().Set("Content-Type", "application/json")
 
 	userName := c.Params.ByName("user")
 	eventName := c.Params.ByName("event")

@@ -26,7 +26,7 @@ func (*Tables) GetTables() ([]FoundTable, error) {
 			necrobot.leagues_old nl
 				ON nl.schema_name = ist.table_schema
     WHERE
-      table_schema not in ('information_schema', 'necrobot' )
+      table_schema not in ('information_schema', 'necrobot', 'necrobot_test', 'performance_schema',  'wiki', 'ladder_test', 'ladderbot', 'rtmp_auth', 'condor_s5_test', 'mysql', 'condor_event_test', 'condor_website'	)
     ORDER BY
       create_time DESC
   `); err == sql.ErrNoRows {

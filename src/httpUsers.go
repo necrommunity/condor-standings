@@ -35,7 +35,7 @@ func httpUser(c *gin.Context) {
 	w := c.Writer
 	
 	data := TemplateData{
-		Title: 			 "Season 8 Users",
+		Title: 			 "CoNDUIT 38 Users",
 		
 	}
 	httpServeTemplate(w, "users", data)
@@ -48,15 +48,14 @@ func httpUserInfo(c *gin.Context) {
 	w := c.Writer
 
 	twitchUsername := c.Params.ByName("user")
-	eventName := "season_8"
+	eventName:= ""
 	twitterUsername := ""
 	if twitchUsername == "" {
 		w.Write([]byte("{\"Error\": \"No username found\"}"))
 		return
 	}
 
-	url := fmt.Sprintf("https://some.pizza/api/user/%s/%s", eventName, twitchUsername)
-	log.Info(url)
+	url := "https://some.pizza/api/event"
 	urlClient := http.Client{
 		Timeout: time.Second * 2,
 	}
@@ -73,10 +72,35 @@ func httpUserInfo(c *gin.Context) {
 	if readErr != nil {
 		log.Error(readErr)
 	}
+	var EventTables []models.ReturnedTable
+	jsonErr := json.Unmarshal(body, &EventTables)
+	if jsonErr != nil {
+		log.Error(jsonErr)
+	}
+	eventName = EventTables[0].EventName
+
+	url = fmt.Sprintf("https://some.pizza/api/user/%s/%s", eventName, twitchUsername)
+	log.Info(url)
+	urlClient = http.Client{
+		Timeout: time.Second * 2,
+	}
+	req, err = http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		log.Error(err)
+	}
+	req.Header.Set("User-Agent", "it's me!")
+	res, getErr = urlClient.Do(req)
+	if getErr != nil {
+		log.Error(getErr)
+	}
+	body, readErr = ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		log.Error(readErr)
+	}
 	
 	// Build the results struct
 	var UserMatches []models.Match
-	jsonErr := json.Unmarshal(body, &UserMatches)
+	jsonErr = json.Unmarshal(body, &UserMatches)
 	if jsonErr != nil {
 		log.Error(jsonErr)
 	}
@@ -92,19 +116,19 @@ func httpUserInfo(c *gin.Context) {
 		winner := race.RaceWinner
 
 		if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer1Name) && winner == 1 {
-			userWins += 1
+			userWins++
 			addTime += race.RaceTime
 			if fstTime > race.RaceTime || fstTime == 0  {
 				fstTime = race.RaceTime
 			}
 		} else if strings.ToLower(twitchUsername) == strings.ToLower(race.Racer2Name) && winner == 2 {
-			userWins += 1
+			userWins++
 			addTime += race.RaceTime
 			if fstTime > race.RaceTime  || fstTime == 0 {
 				fstTime = race.RaceTime
 			}
 		} else {
-			userLosses += 1
+			userLosses++
 		}
 
 	}
@@ -120,7 +144,7 @@ func httpUserInfo(c *gin.Context) {
 	fstTimeF := formatTime(fstTime)
 
 	data := TemplateData{
-		Title: 			 twitchUsername + " Match Info",
+		Title: 			 "User Info",
 		TwitchUsername:	 twitchUsername,
 		TwitterUsername: twitterUsername,
 		UserMatchInfo:   UserMatches,
@@ -132,6 +156,7 @@ func httpUserInfo(c *gin.Context) {
 		AvgTimeF:        avgTimeF,
 		FastTime:        fstTime,
 		FastTimeF:       fstTimeF,
+		FoundTables:	 EventTables,
 	}
 
 	httpServeTemplate(w, "user", data)
