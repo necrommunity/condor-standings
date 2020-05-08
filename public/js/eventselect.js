@@ -10,10 +10,10 @@ $(function($) {
   });
 
   $("#refresh").on("click", function () {
-    var event = $("#eventSelector").val();
-    console.log(event);
-    if (event !== null ){
-      changeEvent(event);
+    var event = $("#eventSelector option:selected");
+    
+    if (event.val() !== null ){
+      changeEvent(event.val(), $('#eventSelector option:selected').text());
     }
   });
   
@@ -43,8 +43,9 @@ function changeEvent(eventName, prettyName) {
     } else {
       $('#eventData').html('<table class="alt" ><thead><tr><th>Name</th><th>Wins</th><th>Losses</th></tr></thead><tbody>'+tabledata+'</tbody></table>');
     }
-  });
+
   $(document).prop('title', 'Home - ' + prettyName);
+  });
 }
 
 $( window ).on( "load", function() {
