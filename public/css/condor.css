@@ -178,3 +178,7 @@ td div.div-racer {
 	-moz-transition: All 0.3s ease;
 	-o-transition: All 0.3s ease;
 }
+
+th.header {
+	text-align: center;
+}

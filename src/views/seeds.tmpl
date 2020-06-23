@@ -1,0 +1,58 @@
+{{ define "content" }}
+
+<!-- Main -->
+<div id="main" class="wrapper style1">
+   <div class="container">
+      <!-- Content -->
+      <center>
+        <section id="upper">
+          <header class="">
+            <div class="row">
+              <div class="12u">
+                <a href="/"><img src="/public/images/condor_logo.png" height="45px" /></a>
+              </div>
+            </div>
+          </header>
+        </section>
+      </center>
+      <p>
+      </p>
+      <section id="s" class="box">
+        <table class="table">
+          <thead>
+            <tr>
+                <th class="header" colspan="2">
+                    Cadence
+                </th>
+            </tr>
+            <tr>
+              <th class="results">
+                Starting Seed Number
+              </th>
+              <th class="results">
+              Average
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          {{ range .SeedStatData }}
+
+            <tr>
+              <td class="results">
+                {{ .SeedNum }}
+              </td>
+              <td class="results">
+                {{ .DisplayTime }} ({{ .NumOfSeeds }})
+              </td>
+            </tr>                      
+          {{ end }}
+
+          </tbody>
+        </table>
+        <div>
+            Total Seeds: {{ .TotalSeeds }}
+        </div>
+      </section>
+    </div>
+  </div>
+{{ end }}

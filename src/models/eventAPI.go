@@ -29,6 +29,7 @@ type Event struct {
 	Participants []Participant
 }
 
+// Sweep holds the data for Sweeps page
 type Sweep struct {
 	MatchID	    int    `json:"match_id"`
 	Racer1	    string `json:"racer1"`
@@ -42,6 +43,7 @@ type Sweep struct {
 	Racer2Wins	int	   `json:"racer2Wins"`
 }
 
+// Match holds the data for a basic event match
 type Match struct {
 	RaceID int `json:"raceID"`
 	RaceTime int `json:"raceTime"`
@@ -57,9 +59,18 @@ type Match struct {
 	IsAutoGen bool `json:"isAutoGen"`
 }
 
+// UserNames holds data for both search and display names for racers
 type UserNames struct {
-	TwitchName string `json;"twitchName"`
+	TwitchName string `json:"twitchName"`
 	DiscordName string `json:"discordName"`
+}
+
+// SeedStats holds data for the seed info page
+type SeedStats struct {
+	SeedNum int `json:"seedNum"`
+	AvgTime int `json:"avgTime"`
+	DisplayTime string `json:"displayTime"`
+	NumOfSeeds int `json:"numOfSeeds"`
 }
 
 // GetEventInfoGroups gets all needed information about a specific event
@@ -123,7 +134,6 @@ func (*EventAPI) GetEventInfoGroups(eventName string) (Event, error) {
 	return TheEvent, nil
 }
 
-// Why in the world does this take 8 seconds to run D:
 // GetEventInfo gets specific event info
 func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	var rows *sql.Rows
@@ -183,8 +193,7 @@ func (*EventAPI) GetEventInfo(eventName string) (Event, error) {
 	return TheEvent, nil
 }
 
-// Why in the world does this take 8 seconds to run D:
-// GetEventInfo gets specific event info
+// GetSweepsInfo gets specific event info
 func (*EventAPI) GetSweepsInfo() ([]Sweep, error) {
 	var rows *sql.Rows
 	var sweepsInfo []Sweep
@@ -234,6 +243,7 @@ func (*EventAPI) GetSweepsInfo() ([]Sweep, error) {
 	return sweepsInfo, nil
 }
 
+// GetUsers takes a username and gets the relevant data
 func (*EventAPI) GetUsers(eventName string) ([]UserNames, error) {
 	var rows *sql.Rows
 	var userList []UserNames
@@ -268,6 +278,7 @@ func (*EventAPI) GetUsers(eventName string) ([]UserNames, error) {
 	return userList, nil
 }
 
+// GetUserRaces gets the races for a given user
 func (*EventAPI) GetUserRaces(userName string, eventName string) ([]Match, error) {
 	var rows *sql.Rows
 	var matchInfo []Match
@@ -335,4 +346,60 @@ func (*EventAPI) GetUserRaces(userName string, eventName string) ([]Match, error
 	}
 
 	return matchInfo, nil
+}
+
+// GetSeedStats gets seed stats for Condor X
+func (*EventAPI) GetSeedStats() ([]SeedStats, error) {
+	var rows *sql.Rows
+	var stats []SeedStats
+	if v, err := db.Query(`
+		SELECT
+			substr(r.seed, 1,1) as seed_num,
+			ROUND(AVG(rr.time)),
+			COUNT(rr.time)
+		FROM
+			condor_x.races r
+		LEFT JOIN
+			condor_x.race_runs rr
+			ON rr.race_id = r.race_id
+		LEFT JOIN
+			condor_x.match_races mr
+			ON mr.race_id = r.race_id
+		LEFT JOIN
+			condor_x.matches m
+			ON m.match_id = mr.match_id
+		LEFT JOIN
+			condor_x.leagues l
+			ON l.league_tag = m.league_tag
+		WHERE
+			r.seed <> 0
+			AND rr.rank = 1
+			AND l.league_name = "cad"
+		GROUP BY
+			seed_num
+		ORDER BY
+	seed_num asc, time asc;
+		`); err == sql.ErrNoRows {
+		return stats, nil
+	} else if err != nil {
+		return stats, err
+	} else {
+		rows = v
+	}
+	defer rows.Close()
+
+	
+	for rows.Next() {
+		var stat SeedStats
+		if err := rows.Scan(
+			&stat.SeedNum,
+			&stat.AvgTime,
+			&stat.NumOfSeeds,
+		); err != nil {
+			return stats, err
+		}
+		stats = append(stats, stat)
+	}
+
+	return stats, nil
 }

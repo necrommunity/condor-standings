@@ -34,16 +34,19 @@ var (
 // Data structures
 // ----------------
 
+// APIError returns an error for the API endpoints
 type APIError struct {
 	ErrorCode    int
 	ErrorMessage string
 }
 
+// Event houses the event data, including name and participants
 type Event struct {
 	EventName    string `json:"eventName"`
 	Participants []models.Participant
 }
 
+// TemplateData holds all of the random template data that can be found for viewing on pages
 type TemplateData struct {
 	// Global 
 	Title       	string
@@ -98,6 +101,10 @@ type TemplateData struct {
 	FastTimeF       string
 	WinPerc         float64
 	LossPerc        float64
+
+	// Seed Stats
+	SeedStatData	[]models.SeedStats
+	TotalSeeds		int
 }
 
 //  -----------------------
@@ -174,6 +181,7 @@ func httpInit() {
 	httpRouter.GET("/user", httpUser)
 	httpRouter.GET("/user/:user", httpUserInfo)
 	httpRouter.GET("/s9stats", httpS9Stats)
+	httpRouter.GET("/seedstats", httpSeedStats)
 	httpRouter.GET("/api", httpAPI)                   // Handles static API
 	httpRouter.GET("/api/event", httpEventDocAPI)     // Handles specific event calls
 	httpRouter.GET("/api/event/:event", httpEventAPI) // Handles specific event calls
@@ -183,6 +191,7 @@ func httpInit() {
 	httpRouter.GET("/api/user", httpUsersAPI)
 	httpRouter.GET("/api/user/:event", httpUsersAPI)
 	httpRouter.GET("/api/user/:event/:user", httpUserAPI)
+	httpRouter.GET("/api/seedstats", httpSeedsAPI)
 	// Static handlers (for the website)
 	httpRouter.Static("/public", "../public")
 

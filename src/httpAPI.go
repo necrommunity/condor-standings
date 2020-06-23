@@ -353,3 +353,21 @@ func httpUserAPI(c *gin.Context) {
 
 	w.Write(jsonData)
 }
+
+func httpSeedsAPI(c *gin.Context) {
+	w := c.Writer
+	w.Header().Set("Content-Type", "application/json")
+	
+	SeedStats, err := db.EventAPI.GetSeedStats()
+	if err != nil {
+		log.Error("Couldn't get Condor X seed stats: ", err)
+	}
+
+	jsonData, err := json.MarshalIndent(SeedStats, "", "\t")
+	if err != nil {
+		log.Error("Couldn't generate JSON")
+		return
+	}
+
+	w.Write(jsonData)
+}
