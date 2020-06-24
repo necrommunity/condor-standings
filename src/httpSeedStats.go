@@ -49,7 +49,9 @@ func httpSeedStats(c *gin.Context) {
 	}
 	var totalSeeds int
 	for i, times := range SeedStats {
-		SeedStats[i].DisplayTime = formatTime(times.AvgTime)
+		SeedStats[i].DisplayAvgTime = formatTime(times.AvgTime)
+		SeedStats[i].DisplayMinTime = formatTime(times.MinTime)
+		SeedStats[i].DisplayMaxTime = formatTime(times.MaxTime)
 		// log.Info(SeedStats[i])
 		totalSeeds += times.NumOfSeeds
 	}

@@ -69,7 +69,12 @@ type UserNames struct {
 type SeedStats struct {
 	SeedNum int `json:"seedNum"`
 	AvgTime int `json:"avgTime"`
-	DisplayTime string `json:"displayTime"`
+	MinTime int `json:"minTime"`
+	MaxTime int `json:"maxTime"`
+	DisplayAvgTime string `json:"displayAvgTime"`
+	DisplayMinTime string `json:"displayMinTime"`
+	DisplayMaxTime string `json:"displayMaxTime"`
+
 	NumOfSeeds int `json:"numOfSeeds"`
 }
 
@@ -355,8 +360,10 @@ func (*EventAPI) GetSeedStats() ([]SeedStats, error) {
 	if v, err := db.Query(`
 		SELECT
 			substr(r.seed, 1,1) as seed_num,
-			ROUND(AVG(rr.time)),
-			COUNT(rr.time)
+			ROUND(AVG(rr.time)) as seed_avg,
+			ROUND(MIN(rr.time)) as seed_min,
+			ROUND(MAX(rr.time)) as seed_max,
+			COUNT(rr.time) as seed_count
 		FROM
 			condor_x.races r
 		LEFT JOIN
@@ -394,6 +401,8 @@ func (*EventAPI) GetSeedStats() ([]SeedStats, error) {
 		if err := rows.Scan(
 			&stat.SeedNum,
 			&stat.AvgTime,
+			&stat.MinTime,
+			&stat.MaxTime,
 			&stat.NumOfSeeds,
 		); err != nil {
 			return stats, err

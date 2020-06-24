@@ -21,7 +21,7 @@
         <table class="table">
           <thead>
             <tr>
-                <th class="header" colspan="2">
+                <th class="header" colspan="4">
                     Cadence
                 </th>
             </tr>
@@ -30,7 +30,13 @@
                 Starting Seed Number
               </th>
               <th class="results">
-              Average
+                Average
+              </th>
+              <th class="results">
+                Minimum
+              </th>
+              <th class="results">
+                Maximum
               </th>
             </tr>
           </thead>
@@ -39,10 +45,16 @@
 
             <tr>
               <td class="results">
-                {{ .SeedNum }}
+                {{ .SeedNum }} ({{ .NumOfSeeds }})
               </td>
               <td class="results">
-                {{ .DisplayTime }} ({{ .NumOfSeeds }})
+                {{ .DisplayAvgTime }} 
+              </td>
+              <td class="results">
+                {{ .DisplayMinTime }} 
+              </td>
+              <td class="results">
+                {{ .DisplayMaxTime }} 
               </td>
             </tr>                      
           {{ end }}
