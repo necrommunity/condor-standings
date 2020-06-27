@@ -54,6 +54,7 @@ type Match struct {
 	Racer1Name string `json:"racer1Name"`
 	Racer2ID int `json:"racer2ID"`
 	Racer2Name string `json:"racer2Name"`
+	LeagueTag	string	`json:"leagueTag"`
 	RaceVod sql.NullString `json:"raceVod"`
 	AutoGenFlag []byte `json:"autoGenFlag"`
 	IsAutoGen bool `json:"isAutoGen"`
@@ -295,6 +296,7 @@ func (*EventAPI) GetUserRaces(userName string, eventName string) ([]Match, error
 				r.seed,
 				m.racer_1_id,
 				m.racer_2_id,
+				m.league_tag,
 				m.vod,
 				(SELECT 
 								e.twitch_name
@@ -340,6 +342,7 @@ func (*EventAPI) GetUserRaces(userName string, eventName string) ([]Match, error
 		 &matches.RaceSeed,
 		 &matches.Racer1ID,
 		 &matches.Racer2ID,
+		 &matches.LeagueTag,
 		 &matches.RaceVod,
 		 &matches.Racer1Name,
 		 &matches.Racer2Name,

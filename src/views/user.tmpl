@@ -55,6 +55,9 @@
           <thead>
             <tr>
               <th class="results">
+                League
+              </th>
+              <th class="results">
                 Racer 1
               </th>
               <th class="results">
@@ -77,6 +80,9 @@
           <tbody id="races">
             <tr>
             {{ range .UserMatchInfo }}
+              <td class="results">
+                <img src="/public/images/{{ .LeagueTag }}.png" height="32px" title="{{ .LeagueTag }}"/>
+              </td>
               <td class="results">
                 <a href="/user/{{ .Racer1Name }}">{{ .Racer1Name }}</a> {{ if eq .RaceWinner  1 }} 🎉{{ end }}
               </td>

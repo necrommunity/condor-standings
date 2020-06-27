@@ -31,6 +31,9 @@ function changeEvent(eventName, prettyName, userName) {
       let winsbody = ''
       for (race of data) {
         winsbody += '<tr>'
+        if (race["leagueTag"]){
+        winsbody += `<td class="results" style="vertical-align: middle;"><img src="/public/images/${race["leagueTag"]}.png" height="32px" title="${race["leagueTag"]}"/></td>`
+        }
         winsbody += '<td class="results" id="racer1"><a href="/user/'+race["racer1Name"]+'">'+race["racer1Name"] +'</a>' 
         if (race["raceWinner"]==1) {
           winsbody += ' 🎉 '
